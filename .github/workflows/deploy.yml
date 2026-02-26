@@ -21,9 +21,8 @@ jobs:
 
       - name: Build
         run: |
-          npm pkg set astro.config.mjs.base="/xiaoxin-home"
+          sed -i "s/integrations: \[tailwind()\]/integrations: [tailwind()],\n  base: '\/xiaoxin-home'/" astro.config.mjs
           npm run build
-          npm pkg delete astro.config.mjs.base
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
