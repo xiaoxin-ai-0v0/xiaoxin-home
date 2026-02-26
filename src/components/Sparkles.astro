@@ -1,0 +1,84 @@
+---
+// Sparkles Effect - 闪烁粒子效果
+interface Props {
+  class?: string;
+  count?: number;
+  size?: number;
+  speed?: number;
+  color?: string;
+}
+
+const {
+  class: className = '',
+  count = 50,
+  size = 2,
+  speed = 0.5,
+  color = '#ffffff'
+} = Astro.props;
+---
+
+<div
+  class:list={["sparkles-container", className]}
+  data-count={count}
+  data-size={size}
+  data-speed={speed}
+  data-color={color}
+>
+  <script is:inline>
+    function initSparkles() {
+      const container = document.querySelector('.sparkles-container');
+      if (!container) return;
+
+      const count = parseInt(container.dataset.count) || 50;
+      const size = parseInt(container.dataset.size) || 2;
+      const speed = parseFloat(container.dataset.speed) || 0.5;
+      const color = container.dataset.color || '#ffffff';
+
+      for (let i = 0; i < count; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.width = (Math.random() * size + size/2) + 'px';
+        sparkle.style.height = sparkle.style.width;
+        sparkle.style.background = color;
+        sparkle.style.animationDelay = Math.random() * 3 + 's';
+        sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+        container.appendChild(sparkle);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSparkles);
+    } else {
+      initSparkles();
+    }
+  </script>
+</div>
+
+<style>
+  .sparkles-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  :global(.sparkle) {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>

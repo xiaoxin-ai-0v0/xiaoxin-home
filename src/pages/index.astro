@@ -6,6 +6,8 @@ import SkillCard from '../components/SkillCard.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import VideoCard from '../components/VideoCard.astro';
 import ProductCard from '../components/ProductCard.astro';
+import Meteor from '../components/Meteor.astro';
+import Sparkles from '../components/Sparkles.astro';
 
 const skills = [
   { name: 'Java', level: 85, color: 'yellow' },
@@ -90,6 +92,12 @@ const products = [
 ---
 
 <Layout title="我的个人网站 - 年轻/活泼/创造">
+  <!-- 背景特效 -->
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <Meteor count={15} />
+    <Sparkles count={50} color="#fbbf24" size={2} />
+  </div>
+
   <!-- 首页 -->
   <section id="page-home" class="page-section">
     <Hero />

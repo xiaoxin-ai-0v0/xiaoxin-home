@@ -1,0 +1,69 @@
+---
+// Meteor Effect - 流星效果组件
+interface Props {
+  class?: string;
+  count?: number;
+}
+
+const { class: className = '', count = 20 } = Astro.props;
+---
+
+<div class:list={["meteor-container", className]} data-count={count}>
+  <script is:inline>
+    // 初始化流星
+    function initMeteors() {
+      const container = document.querySelector('.meteor-container');
+      if (!container) return;
+
+      const count = parseInt(container.dataset.count) || 20;
+
+      for (let i = 0; i < count; i++) {
+        const meteor = document.createElement('div');
+        meteor.className = 'meteor';
+        meteor.style.left = Math.random() * 100 + '%';
+        meteor.style.top = Math.random() * 100 + '%';
+        meteor.style.animationDelay = Math.random() * 5 + 's';
+        meteor.style.animationDuration = (2 + Math.random() * 3) + 's';
+        container.appendChild(meteor);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMeteors);
+    } else {
+      initMeteors();
+    }
+  </script>
+</div>
+
+<style>
+  .meteor-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  :global(.meteor) {
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, white, transparent);
+    opacity: 0;
+    animation: meteor linear infinite;
+  }
+
+  @keyframes meteor {
+    0% {
+      transform: translateX(0) translateY(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(300px) translateY(300px);
+      opacity: 0;
+    }
+  }
+</style>
