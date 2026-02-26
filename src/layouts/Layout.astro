@@ -24,13 +24,13 @@ const { title } = Astro.props;
     <!-- 导航栏 -->
     <nav class="sticky top-4 z-50 mx-auto max-w-4xl px-4">
       <div class="neo-card rounded-full px-6 py-3 flex justify-between items-center bg-white">
-        <a href="/" class="text-2xl font-black hover:text-yellow-500 transition-colors">LOGO</a>
+        <a href={import.meta.env.BASE_URL + '/'} class="text-2xl font-black hover:text-yellow-500 transition-colors">LOGO</a>
         <div class="flex gap-4 font-bold text-sm md:text-base">
-          <a href="/?page=home" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">首页</a>
-          <a href="/?page=about" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">关于</a>
-          <a href="/?page=blog" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">文章</a>
-          <a href="/?page=video" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">视频</a>
-          <a href="/?page=product" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">产品</a>
+          <a href={import.meta.env.BASE_URL + '/?page=home'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">首页</a>
+          <a href={import.meta.env.BASE_URL + '/?page=about'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">关于</a>
+          <a href={import.meta.env.BASE_URL + '/?page=blog'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">文章</a>
+          <a href={import.meta.env.BASE_URL + '/?page=video'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">视频</a>
+          <a href={import.meta.env.BASE_URL + '/?page=product'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">产品</a>
         </div>
       </div>
     </nav>
