@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="小新的个人网站 - 年轻/活泼/创造" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class="grid-bg min-h-screen flex flex-col">
+    <!-- 导航栏 -->
+    <nav class="sticky top-4 z-50 mx-auto max-w-4xl px-4">
+      <div class="neo-card rounded-full px-6 py-3 flex justify-between items-center bg-white">
+        <a href="/" class="text-2xl font-black hover:text-yellow-500 transition-colors">LOGO</a>
+        <div class="flex gap-4 font-bold text-sm md:text-base">
+          <a href="/?page=home" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">首页</a>
+          <a href="/?page=about" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">关于</a>
+          <a href="/?page=blog" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">文章</a>
+          <a href="/?page=video" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">视频</a>
+          <a href="/?page=product" class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">产品</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex-1 max-w-6xl mx-auto px-4 py-12 w-full">
+      <slot />
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t-4 border-black bg-white p-10 shrink-0">
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="font-black text-2xl italic">Stay Creative.</div>
+        <div class="flex gap-6 font-bold">
+          <a href="#" class="hover:text-blue-500 transition-colors">Github</a>
+          <a href="#" class="hover:text-pink-500 transition-colors">抖音</a>
+          <a href="#" class="hover:text-blue-400 transition-colors">Twitter</a>
+        </div>
+        <p class="text-sm text-gray-500 font-bold">© 2026 小新的创意空间</p>
+      </div>
+    </footer>
+
+    <script is:inline>
+      function showPage(pageId) {
+        // 隐藏所有页面
+        document.querySelectorAll('.page-section').forEach(section => {
+          section.classList.add('hidden');
+        });
+        // 显示目标页面
+        const targetPage = document.getElementById('page-' + pageId);
+        if (targetPage) {
+          targetPage.classList.remove('hidden');
+        }
+
+        // 更新导航链接样式
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('bg-yellow-400');
+          if (link.href.includes('page=' + pageId) || (pageId === 'home' && !link.href.includes('page='))) {
+            link.classList.add('bg-yellow-400');
+          }
+        });
+
+        // 滚动到顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // 初始化显示页面
+      function initPage() {
+        const params = new URLSearchParams(window.location.search);
+        const page = params.get('page');
+        if (page && ['home', 'about', 'blog', 'video', 'product'].includes(page)) {
+          showPage(page);
+        } else {
+          showPage('home');
+        }
+      }
+      initPage();
+    </script>
+  </body>
+</html>

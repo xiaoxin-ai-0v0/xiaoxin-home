@@ -1,0 +1,51 @@
+---
+import NeoCard from './NeoCard.astro';
+
+interface Props {
+  title: string;
+  views: string;
+  platform: string;
+  link?: string;
+  thumbnail?: string;
+}
+
+const { title, views, platform, link, thumbnail } = Astro.props;
+---
+
+{link ? (
+  <a href={link} target="_blank" rel="noopener noreferrer" class="block">
+    <NeoCard class="overflow-hidden group" hover={true}>
+      <div class="aspect-video bg-gray-200 flex items-center justify-center relative">
+        {thumbnail ? (
+          <img src={thumbnail} alt={title} class="w-full h-full object-cover" />
+        ) : (
+          <span class="text-4xl group-hover:scale-125 transition-transform">📺</span>
+        )}
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <span class="bg-white p-3 rounded-full neo-button">▶️</span>
+        </div>
+      </div>
+      <div class="p-4 bg-white">
+        <h4 class="font-bold">{title}</h4>
+        <p class="text-sm text-gray-500 mt-1">{views} 播放 · {platform}</p>
+      </div>
+    </NeoCard>
+  </a>
+) : (
+  <NeoCard class="overflow-hidden group" hover={true}>
+    <div class="aspect-video bg-gray-200 flex items-center justify-center relative">
+      {thumbnail ? (
+        <img src={thumbnail} alt={title} class="w-full h-full object-cover" />
+      ) : (
+        <span class="text-4xl group-hover:scale-125 transition-transform">📺</span>
+      )}
+      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <span class="bg-white p-3 rounded-full neo-button">▶️</span>
+      </div>
+    </div>
+    <div class="p-4 bg-white">
+      <h4 class="font-bold">{title}</h4>
+      <p class="text-sm text-gray-500 mt-1">{views} 播放 · {platform}</p>
+    </div>
+  </NeoCard>
+)}

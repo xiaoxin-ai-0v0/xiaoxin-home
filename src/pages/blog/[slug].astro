@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import NeoCard from '../../components/NeoCard.astro';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+};
+---
+
+<Layout title={`${entry.data.title} - 小新的博客`}>
+  <div class="max-w-3xl mx-auto">
+    <a href="/?page=blog" class="inline-flex items-center gap-2 mb-8 neo-button px-4 py-2 rounded-full font-bold bg-white">
+      ← 返回文章列表
+    </a>
+
+    <NeoCard class="p-8 md:p-12 bg-white">
+      <div class="mb-8">
+        <span class="text-xs font-bold px-3 py-1 bg-yellow-400 border-2 border-black rounded-full">
+          {entry.data.category}
+        </span>
+        <h1 class="text-3xl md:text-4xl font-black mt-4">{entry.data.title}</h1>
+        <p class="text-gray-500 font-bold mt-2">{formatDate(entry.data.date)}</p>
+      </div>
+
+      <div class="prose prose-lg max-w-none prose-headings:font-black prose-headings:border-b-4 prose-headings:border-black prose-p:text-gray-700 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-code:bg-yellow-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-bold prose-pre:bg-black prose-pre:text-white prose-pre:rounded-lg prose-pre:border-4 prose-pre:border-black">
+        <Content />
+      </div>
+
+      {entry.data.tags && (
+        <div class="mt-8 pt-8 border-t-4 border-black">
+          <div class="flex flex-wrap gap-2">
+            {entry.data.tags.map((tag) => (
+              <span class="px-3 py-1 bg-gray-100 border-2 border-black font-bold text-xs rounded-full">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </NeoCard>
+  </div>
+</Layout>

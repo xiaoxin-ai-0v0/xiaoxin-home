@@ -1,0 +1,33 @@
+---
+import NeoButton from './NeoButton.astro';
+import Badge from './Badge.astro';
+---
+
+<div class="flex flex-col md:flex-row items-center gap-12 mt-10">
+  <div class="flex-1 space-y-6">
+    <div class="inline-block bg-purple-400 neo-button px-4 py-1 font-bold rounded-md -rotate-2">
+      HELLO, WORLD! 👋
+    </div>
+    <h1 class="text-6xl md:text-8xl font-black leading-tight">
+      我是 <span class="underline decoration-yellow-400">小新</span> <br />
+      创造有趣的代码。
+    </h1>
+    <p class="text-xl text-gray-700 font-medium">
+      全栈开发者 / 视频创作者 / 业余厨师 <br />
+      正在用 AI工具 探索世界的无限可能。
+    </p>
+    <div class="flex gap-4">
+      <NeoButton variant="primary">联系我</NeoButton>
+      <NeoButton variant="secondary">我的作品</NeoButton>
+    </div>
+  </div>
+  <div class="relative">
+    <div class="w-64 h-64 md:w-80 md:h-80 bg-blue-400 neo-card rounded-full overflow-hidden rotate-[3deg]">
+      <div class="w-full h-full flex items-center justify-center text-8xl">🚀</div>
+    </div>
+    <!-- 浮动徽章 -->
+    <div class="absolute -bottom-4 -left-4">
+      <Badge color="orange" rotate={-10}>100% 充满活力</Badge>
+    </div>
+  </div>
+</div>

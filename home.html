@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人网站 - 年轻/活泼/创造</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f0f2f5;
+        }
+        /* 新丑风 (Neo-brutalism) 核心样式 */
+        .neo-card {
+            background: white;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px 0px #000;
+            transition: all 0.2s ease;
+        }
+        .neo-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px 0px #000;
+        }
+        .neo-button {
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px 0px #000;
+            transition: all 0.1s;
+        }
+        .neo-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px 0px #000;
+        }
+        .active-nav {
+            background-color: #fbbf24; /* yellow-400 */
+        }
+        /* 网格背景 */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- 导航栏 -->
+    <nav class="sticky top-4 z-50 mx-auto max-w-4xl px-4">
+        <div class="neo-card rounded-full px-6 py-3 flex justify-between items-center bg-white">
+            <div class="text-2xl font-black">LOGO</div>
+            <div class="flex gap-4 font-bold text-sm md:text-base">
+                <button onclick="showPage('home')" class="nav-btn px-3 py-1 rounded-full active-nav hover:bg-yellow-200 transition">首页</button>
+                <button onclick="showPage('about')" class="nav-btn px-3 py-1 rounded-full hover:bg-yellow-200 transition">关于</button>
+                <button onclick="showPage('blog')" class="nav-btn px-3 py-1 rounded-full hover:bg-yellow-200 transition">文章</button>
+                <button onclick="showPage('video')" class="nav-btn px-3 py-1 rounded-full hover:bg-yellow-200 transition">视频</button>
+                <button onclick="showPage('product')" class="nav-btn px-3 py-1 rounded-full hover:bg-yellow-200 transition">产品</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        
+        <!-- 首页 -->
+        <section id="page-home" class="page-section">
+            <div class="flex flex-col md:flex-row items-center gap-12 mt-10">
+                <div class="flex-1 space-y-6">
+                    <div class="inline-block bg-purple-400 neo-button px-4 py-1 font-bold rounded-md rotate-[-2deg]">
+                        HELLO, WORLD! 👋
+                    </div>
+                    <h1 class="text-6xl md:text-8xl font-black leading-tight">
+                        我是 <span class="underline decoration-yellow-400">小新</span> <br>
+                        创造有趣的代码。
+                    </h1>
+                    <p class="text-xl text-gray-700 font-medium">
+                        全栈开发者 / 视频创作者 / 业余厨师 <br>
+                        正在用 AI工具 探索世界的无限可能。
+                    </p>
+                    <div class="flex gap-4">
+                        <button class="neo-button bg-black text-white px-8 py-3 rounded-md font-bold text-lg">
+                            联系我
+                        </button>
+                        <button class="neo-button bg-white text-black px-8 py-3 rounded-md font-bold text-lg">
+                            我的作品
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="w-64 h-64 md:w-80 md:h-80 bg-blue-400 neo-card rounded-full overflow-hidden rotate-[3deg]">
+                        <div class="w-full h-full flex items-center justify-center text-8xl">🚀</div>
+                    </div>
+                    <!-- 浮动徽章 -->
+                    <div class="absolute -bottom-4 -left-4 bg-orange-400 neo-card p-3 rounded-lg rotate-[-10deg] font-bold">
+                        100% 充满活力
+                    </div>
+                </div>
+            </div>
+
+            <!-- 状态组件 -->
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="neo-card p-6 bg-pink-100">
+                    <div class="text-sm font-bold text-pink-500 uppercase">当前状态</div>
+                    <div class="text-xl font-bold mt-2">🎧 正在听: 周杰伦 - 晴天</div>
+                </div>
+                <div class="neo-card p-6 bg-green-100">
+                    <div class="text-sm font-bold text-green-500 uppercase">地理位置</div>
+                    <div class="text-xl font-bold mt-2">📍 坐标: 陕西 · 西安</div>
+                </div>
+                <div class="neo-card p-6 bg-blue-100">
+                    <div class="text-sm font-bold text-blue-500 uppercase">最新动态</div>
+                    <div class="text-xl font-bold mt-2">⚡ 正在爆肝 AI 教程</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section id="page-about" class="page-section hidden">
+            <h2 class="text-4xl font-black mb-10">🙋 欢迎来到我的世界</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="neo-card p-8 bg-white">
+                    <h3 class="text-2xl font-bold mb-4">技能树</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1 font-bold"><span>React/Astro</span><span>90%</span></div>
+                            <div class="w-full bg-black h-4 rounded-full p-0.5"><div class="bg-yellow-400 h-full rounded-full" style="width: 90%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1 font-bold"><span>视频剪辑</span><span>75%</span></div>
+                            <div class="w-full bg-black h-4 rounded-full p-0.5"><div class="bg-blue-400 h-full rounded-full" style="width: 75%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1 font-bold"><span>咖啡消耗量</span><span>99%</span></div>
+                            <div class="w-full bg-black h-4 rounded-full p-0.5"><div class="bg-orange-400 h-full rounded-full" style="width: 99%"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="neo-card p-8 bg-yellow-50">
+                    <h3 class="text-2xl font-bold mb-4">我的装备</h3>
+                    <ul class="space-y-2 font-medium">
+                        <li class="flex items-center gap-2">💻 MacBook Pro M2</li>
+                        <li class="flex items-center gap-2">⌨️ HHKB Classic</li>
+                        <li class="flex items-center gap-2">📷 Sony A7C</li>
+                        <li class="flex items-center gap-2">🎨 VS Code + Tokyo Night</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 文章 -->
+        <section id="page-blog" class="page-section hidden">
+            <h2 class="text-4xl font-black mb-10">✍️ 碎碎念与干货</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="neo-card p-6 flex flex-col justify-between hover:bg-yellow-50">
+                    <div>
+                        <span class="text-xs font-bold px-2 py-1 bg-blue-200 border-2 border-black rounded-full">技术</span>
+                        <h3 class="text-2xl font-bold mt-4">为什么我从 React 转向了 Astro？</h3>
+                        <p class="mt-2 text-gray-600">这篇文章详细介绍了 Astro 的岛屿架构如何解决页面性能问题...</p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <span class="font-bold text-sm">2026.10.24</span>
+                        <button class="neo-button bg-black text-white px-4 py-2 rounded font-bold">阅读详情</button>
+                    </div>
+                </div>
+                <div class="neo-card p-6 flex flex-col justify-between hover:bg-purple-50">
+                    <div>
+                        <span class="text-xs font-bold px-2 py-1 bg-purple-200 border-2 border-black rounded-full">生活</span>
+                        <h3 class="text-2xl font-bold mt-4">如何平衡副业与生活？</h3>
+                        <p class="mt-2 text-gray-600">在爆肝项目的同时，如何保持头发的茂盛，这是一个严肃的问题。</p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <span class="font-bold text-sm">2026.11.01</span>
+                        <button class="neo-button bg-black text-white px-4 py-2 rounded font-bold">阅读详情</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 视频 -->
+        <section id="page-video" class="page-section hidden">
+            <h2 class="text-4xl font-black mb-10">🎬 镜头里的故事</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 视频卡片 -->
+                <div class="neo-card overflow-hidden group">
+                    <div class="aspect-video bg-gray-200 flex items-center justify-center relative">
+                        <span class="text-4xl group-hover:scale-125 transition">📺</span>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <button class="bg-white p-3 rounded-full neo-button">▶️</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-white">
+                        <h4 class="font-bold">我的 2026 工作室探秘</h4>
+                        <p class="text-sm text-gray-500 mt-1">2.4k 播放 · Bilibili</p>
+                    </div>
+                </div>
+                <div class="neo-card overflow-hidden group">
+                    <div class="aspect-video bg-gray-200 flex items-center justify-center relative">
+                        <span class="text-4xl group-hover:scale-125 transition">💻</span>
+                    </div>
+                    <div class="p-4 bg-white">
+                        <h4 class="font-bold">从零开始写一个个人主页</h4>
+                        <p class="text-sm text-gray-500 mt-1">1.8k 播放 · Bilibili</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 产品 -->
+        <section id="page-product" class="page-section hidden">
+            <h2 class="text-4xl font-black mb-10">📦 实验室的作品</h2>
+            <div class="space-y-6">
+                <div class="neo-card p-8 bg-green-50 flex flex-col md:flex-row gap-8 items-center">
+                    <div class="w-32 h-32 bg-green-400 neo-card rounded-2xl flex items-center justify-center text-5xl">🎨</div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-3xl font-black">ColorGenie</h3>
+                        <p class="text-xl font-medium mt-2">一个基于 AI 的配色助手，为设计师提供无限灵感。</p>
+                        <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-2">
+                            <span class="px-3 py-1 bg-white border-2 border-black font-bold text-xs rounded-full">SaaS</span>
+                            <span class="px-3 py-1 bg-white border-2 border-black font-bold text-xs rounded-full">React</span>
+                        </div>
+                    </div>
+                    <button class="neo-button bg-black text-white px-8 py-3 rounded-md font-bold">查看项目</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-20 border-t-4 border-black bg-white p-10">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="font-black text-2xl italic">Stay Creative.</div>
+            <div class="flex gap-6 font-bold">
+                <a href="#" class="hover:text-blue-500">Github</a>
+                <a href="#" class="hover:text-pink-500">Bilibili</a>
+                <a href="#" class="hover:text-blue-400">Twitter</a>
+            </div>
+            <p class="text-sm text-gray-500 font-bold">© 2026 小新的创意空间</p>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            // 显示目标页面
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+
+            // 更新导航按钮样式
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-nav');
+                if(btn.innerText.includes(getPageName(pageId))) {
+                    btn.classList.add('active-nav');
+                }
+            });
+
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function getPageName(id) {
+            const map = {
+                'home': '首页',
+                'about': '关于',
+                'blog': '文章',
+                'video': '视频',
+                'product': '产品'
+            };
+            return map[id];
+        }
+
+        // 初始化显示首页
+        showPage('home');
+    </script>
+</body>
+</html>

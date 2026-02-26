@@ -1,0 +1,29 @@
+---
+interface Props {
+  class?: string;
+  variant?: 'primary' | 'secondary';
+  type?: 'button' | 'submit';
+}
+
+const {
+  class: className = '',
+  variant = 'primary',
+  type = 'button'
+} = Astro.props;
+
+const variantClasses = {
+  primary: 'bg-black text-white',
+  secondary: 'bg-white text-black'
+};
+---
+
+<button
+  type={type}
+  class:list={[
+    'neo-button px-8 py-3 rounded-md font-bold text-lg',
+    variantClasses[variant],
+    className
+  ]}
+>
+  <slot />
+</button>

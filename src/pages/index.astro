@@ -1,0 +1,177 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import StatusCards from '../components/StatusCards.astro';
+import SkillCard from '../components/SkillCard.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import VideoCard from '../components/VideoCard.astro';
+import ProductCard from '../components/ProductCard.astro';
+
+const skills = [
+  { name: 'Java', level: 85, color: 'yellow' },
+  { name: 'AI/ML', level: 30, color: 'blue' },
+  { name: 'Spring Boot', level: 80, color: 'green' },
+  { name: 'MySQL', level: 75, color: 'purple' },
+  { name: 'Python', level: 40, color: 'pink' },
+  { name: '前端基础', level: 50, color: 'orange' }
+];
+
+const equipment = [
+  '💻 笔记本电脑',
+  '🖥️ 显示器',
+  '⌨️ 机械键盘',
+  '🖱️ 无线鼠标',
+  '🎧 降噪耳机'
+];
+
+const timeline = [
+  { year: '2024', title: '开始学习 Java', desc: '踏入编程世界' },
+  { year: '2026.02', title: 'AI 开发入门', desc: '开始学习 AI/机器学习' },
+  { year: '未来', title: '持续成长中...', desc: '正在学习 AI 开发ing' }
+];
+
+const articles = [
+  {
+    title: 'Java 学习路线分享',
+    description: '从入门到进阶，我是如何学习 Java 的，包含推荐书籍和项目经验...',
+    date: '2026.01.15',
+    category: '技术',
+    categoryColor: 'blue' as const,
+    slug: 'java-learning'
+  },
+  {
+    title: 'AI 时代，开发者如何转型？',
+    description: '分享我开始学习 AI 开发的初衷和规划，探讨程序员的未来方向。',
+    date: '2026.02.20',
+    category: '技术',
+    categoryColor: 'green' as const,
+    slug: 'ai-transition'
+  },
+  {
+    title: '为什么我从 React 转向了 Astro？',
+    description: '这篇文章详细介绍了 Astro 的岛屿架构如何解决页面性能问题...',
+    date: '2025.10.24',
+    category: '技术',
+    categoryColor: 'blue' as const,
+    slug: 'why-astro'
+  },
+  {
+    title: '如何平衡学习与生活？',
+    description: '在爆肝学习的同时，如何保持身心健康，这是一个严肃的问题。',
+    date: '2025.11.01',
+    category: '生活',
+    categoryColor: 'purple' as const,
+    slug: 'balance-life'
+  }
+];
+
+const videos = [
+  { title: '100-如何使用AI工具制作飞行棋小游戏', views: '0.6k', platform: '抖音', link: 'https://v.douyin.com/ld6P0YAMVvw/' },
+  { title: '001-抓住AI时代的风口', views: '0.8k', platform: '抖音', link: 'https://v.douyin.com/ORqGKAycWok/' }
+];
+
+const products = [
+  {
+    name: '飞行棋小游戏',
+    description: '使用 AI 工具制作的飞行棋小游戏，可以在线与朋友一起游玩！',
+    icon: '🎲',
+    tags: ['游戏', 'AI', 'React'],
+    color: 'purple' as const,
+    link: '/game/fxq.html'
+  },
+  {
+    name: 'ColorGenie',
+    description: '一个基于 AI 的配色助手，为设计师提供无限灵感。',
+    icon: '🎨',
+    tags: ['SaaS', 'React'],
+    color: 'green' as const
+  }
+];
+---
+
+<Layout title="我的个人网站 - 年轻/活泼/创造">
+  <!-- 首页 -->
+  <section id="page-home" class="page-section">
+    <Hero />
+    <StatusCards />
+  </section>
+
+  <!-- 关于我 -->
+  <section id="page-about" class="page-section hidden">
+    <h2 class="text-4xl font-black mb-10">🙋 欢迎来到我的世界</h2>
+
+    <!-- 简介 -->
+    <div class="neo-card p-8 bg-white mb-10">
+      <h3 class="text-2xl font-black mb-4">👨‍💻 关于我</h3>
+      <p class="text-lg text-gray-700 leading-relaxed">
+        你好！我是小新，一名正在成长中的 Java 开发工程师。
+        2024 年开始学习 Java 开发，目前正在学习 AI 开发，致力于成为新时代的 AI 工程师。
+        <br><br>
+        我相信 AI 是未来的趋势，很高兴能在这个时代学习最前沿的技术。
+        空闲时间我会研究新技术、学习 AI 相关知识、或者玩会儿游戏🎮
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+      <SkillCard skills={skills} />
+      <SkillCard title="我的装备" class="bg-yellow-50">
+        <ul class="space-y-2 font-medium">
+          {equipment.map((item) => (
+            <li class="flex items-center gap-2">{item}</li>
+          ))}
+        </ul>
+      </SkillCard>
+    </div>
+
+    <!-- 时间线 -->
+    <div class="neo-card p-8 bg-blue-50">
+      <h3 class="text-2xl font-black mb-6">📅 我的历程</h3>
+      <div class="space-y-6">
+        {timeline.map((item, index) => (
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-4 h-4 bg-black rounded-full"></div>
+              {index < timeline.length - 1 && <div class="w-0.5 h-full bg-black mt-2"></div>}
+            </div>
+            <div class="pb-6">
+              <span class="inline-block bg-yellow-400 px-2 py-0.5 text-sm font-bold border-2 border-black rounded">{item.year}</span>
+              <h4 class="text-lg font-bold mt-1">{item.title}</h4>
+              <p class="text-gray-600">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 文章 -->
+  <section id="page-blog" class="page-section hidden">
+    <h2 class="text-4xl font-black mb-4">✍️ 碎碎念与干货</h2>
+    <p class="text-lg text-gray-600 mb-10">记录学习心得，分享技术干货</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {articles.map((article) => (
+        <ArticleCard {...article} />
+      ))}
+    </div>
+  </section>
+
+  <!-- 视频 -->
+  <section id="page-video" class="page-section hidden">
+    <h2 class="text-4xl font-black mb-10">🎬 镜头里的故事</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {videos.map((video) => (
+        <VideoCard {...video} />
+      ))}
+    </div>
+  </section>
+
+  <!-- 产品 -->
+  <section id="page-product" class="page-section hidden">
+    <h2 class="text-4xl font-black mb-10">📦 实验室的作品</h2>
+    <div class="space-y-6">
+      {products.map((product) => (
+        <ProductCard {...product} />
+      ))}
+    </div>
+  </section>
+</Layout>

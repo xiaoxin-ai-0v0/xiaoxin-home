@@ -1,0 +1,52 @@
+---
+import NeoCard from './NeoCard.astro';
+import NeoButton from './NeoButton.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: string;
+  category: string;
+  categoryColor?: 'blue' | 'purple' | 'green' | 'orange';
+  slug?: string;
+}
+
+const {
+  title,
+  description,
+  date,
+  category,
+  categoryColor = 'blue',
+  slug
+} = Astro.props;
+
+const categoryColorMap = {
+  blue: 'bg-blue-200',
+  purple: 'bg-purple-200',
+  green: 'bg-green-200',
+  orange: 'bg-orange-200'
+};
+---
+
+<NeoCard
+  class="p-6 flex flex-col justify-between hover:bg-yellow-50"
+  hover={true}
+>
+  <div>
+    <span class={`text-xs font-bold px-2 py-1 ${categoryColorMap[categoryColor]} border-2 border-black rounded-full`}>
+      {category}
+    </span>
+    <h3 class="text-2xl font-bold mt-4">{title}</h3>
+    <p class="mt-2 text-gray-600">{description}</p>
+  </div>
+  <div class="mt-6 flex justify-between items-center">
+    <span class="font-bold text-sm">{date}</span>
+    {slug ? (
+      <a href={`/blog/${slug}`} class="neo-button bg-black text-white px-4 py-2 rounded font-bold inline-block">
+        阅读详情
+      </a>
+    ) : (
+      <NeoButton variant="primary" class="px-4 py-2 text-base">阅读详情</NeoButton>
+    )}
+  </div>
+</NeoCard>

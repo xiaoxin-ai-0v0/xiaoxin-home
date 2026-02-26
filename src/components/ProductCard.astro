@@ -1,0 +1,53 @@
+---
+import NeoCard from './NeoCard.astro';
+import NeoButton from './NeoButton.astro';
+
+interface Props {
+  name: string;
+  description: string;
+  icon: string;
+  tags: string[];
+  color?: 'green' | 'blue' | 'purple' | 'orange';
+  link?: string;
+}
+
+const { name, description, icon, tags, color = 'green', link } = Astro.props;
+
+const colorClasses = {
+  green: 'bg-green-50',
+  blue: 'bg-blue-50',
+  purple: 'bg-purple-50',
+  orange: 'bg-orange-50'
+};
+
+const iconColorClasses = {
+  green: 'bg-green-400',
+  blue: 'bg-blue-400',
+  purple: 'bg-purple-400',
+  orange: 'bg-orange-400'
+};
+---
+
+<NeoCard class={`p-8 flex flex-col md:flex-row gap-8 items-center ${colorClasses[color]}`}>
+  <div class={`w-32 h-32 ${iconColorClasses[color]} neo-card rounded-2xl flex items-center justify-center text-5xl`}>
+    {icon}
+  </div>
+  <div class="flex-1 text-center md:text-left">
+    <h3 class="text-3xl font-black">{name}</h3>
+    <p class="text-xl font-medium mt-2">{description}</p>
+    <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-2">
+      {tags.map((tag) => (
+        <span class="px-3 py-1 bg-white border-2 border-black font-bold text-xs rounded-full">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+  {link ? (
+    <a href={link} target="_blank" rel="noopener noreferrer">
+      <NeoButton variant="primary">开始游戏</NeoButton>
+    </a>
+  ) : (
+    <NeoButton variant="primary">查看项目</NeoButton>
+  )}
+</NeoCard>

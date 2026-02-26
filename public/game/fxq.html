@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>情侣飞行棋 - 沉沦之夜</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* 自定义字体与动画 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #0f0514;
+            color: #ffe4e1;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-serif-sc {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        /* 氛围背景动画 */
+        .bg-ambient {
+            background: radial-gradient(circle at 50% 30%, #2a0835 0%, #0f0514 60%, #000000 100%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 182, 193, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card-active {
+            background: rgba(255, 182, 193, 0.1);
+            border: 1px solid rgba(255, 182, 193, 0.5);
+            box-shadow: 0 0 20px rgba(255, 182, 193, 0.2);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+        }
+
+        /* 棋盘路径发光效果 */
+        .path-node {
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.3), inset 0 0 10px rgba(255, 182, 193, 0.2);
+        }
+
+        /* 动画关键帧 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+        .animate-heartbeat {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes rollDice {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        .animate-roll {
+            animation: rollDice 0.6s ease-in-out;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 182, 193, 0.2);
+            border-radius: 4px;
+        }
+        
+        /* 棋盘网格布局辅助 */
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+    </style>
+</head>
+<body class="bg-ambient min-h-screen text-pink-100 flex justify-center items-center">
+    <div id="root" class="w-full max-w-md h-[100dvh] relative overflow-hidden flex flex-col"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- 题库数据 (30格) ---
+        const simpleTiles = [
+            "起点 - 浪漫的开始", "夸赞对方今天最好看的一个细节", "十指紧扣对视10秒", "喝一口水/饮料", "进2格",
+            "在对方耳边轻声说句情话", "拥抱对方30秒", "安全区 - 休息一回合", "退1格", "亲吻对方额头",
+            "说出对方的一个优点", "轻轻捏一下对方的脸颊", "交换一个秘密", "进1格", "让对方靠在你的肩膀上1分钟",
+            "描述第一次心动的感觉", "安全区 - 深呼吸", "用手指描绘对方的眉眼", "退2格", "合唱一首情歌的副歌",
+            "给对方一个温柔的摸头杀", "喝交杯酒/水", "亲吻对方的手背", "进2格", "分享一个你最想和对方去的地方",
+            "让对方指定你做一个可爱的表情", "安全区 - 眉目传情", "给对方揉揉肩膀1分钟", "退1格", "终点 - 获得对方的一个专属愿望！"
+        ];
+
+        const hardTiles = [
+            "起点 - 沉沦的开始", "蒙眼猜对方触碰你哪里", "法式深吻1分钟", "脱去一件非关键衣物(或罚酒)", "进2格",
+            "在对方锁骨处留下一个吻", "交出主动权，服从对方指令1回合", "安全区 - 平复心跳", "退1格", "用嘴喂对方吃一口东西/喝水",
+            "蒙眼，让对方用冰块/指尖滑过背部", "亲吻对方耳垂并轻轻呼气", "说出一个羞耻的幻想", "进1格", "坐在对方腿上对视1分钟",
+            "给对方做一个3分钟的精油按摩", "安全区 - 中场休息", "在对方大腿内侧画圈圈", "退2格", "接受对方的一个轻微惩罚",
+            "模仿一个性感的姿势", "互相解开对方的一颗扣子", "用舌尖描摹对方的唇线", "进2格", "说出对方身体最吸引你的部位",
+            "接下来的3回合必须牵着手", "安全区 - 升温", "给对方种一个小草莓", "退1格", "终点 - 今夜，完全属于你们！"
+        ];
+
+        // --- 图标组件 (内联SVG) ---
+        const IconHeart = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+        );
+
+        const IconSettings = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        );
+
+        const IconMusic = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+        );
+
+        const IconEdit = ({ className }) => (
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+        )
+
+        const IconChevronLeft = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        );
+
+        const IconList = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+        );
+
+        const IconVolume2 = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+        );
+
+        const IconVolumeX = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+        );
+
+        const IconMusicNote = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+        );
+
+        const IconMusicOff = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+                <line x1="2" y1="2" x2="22" y2="22"></line>
+            </svg>
+        );
+
+        const IconSave = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+        );
+
+        const IconTrash = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+        );
+
+        const IconPlay = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+        );
+
+        // --- 本地存储工具 ---
+        const storage = {
+            get: (key, defaultValue) => {
+                try {
+                    const item = localStorage.getItem(key);
+                    return item ? JSON.parse(item) : defaultValue;
+                } catch {
+                    return defaultValue;
+                }
+            },
+            set: (key, value) => {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } catch (e) {
+                    console.error('Storage error:', e);
+                }
+            }
+        };
+
+        // --- 主组件 ---
+        const App = () => {
+            // 状态管理
+            const [screen, setScreen] = useState('home'); // home, game, editor, settings, scripts
+            const [mode, setMode] = useState('simple'); // simple, hard, custom
+            const [customTiles, setCustomTiles] = useState([...simpleTiles]);
+
+            // 从 localStorage 加载设置
+            const [playerNames, setPlayerNames] = useState(() =>
+                storage.get('playerNames', ['玩家一', '玩家二'])
+            );
+            const [settings, setSettings] = useState(() =>
+                storage.get('settings', { music: true, sound: true })
+            );
+            const [savedScripts, setSavedScripts] = useState(() =>
+                storage.get('savedScripts', [])
+            );
+
+            // 游戏状态
+            const [players, setPlayers] = useState([
+                { id: 1, name: playerNames[0], color: 'bg-[#ff7b9c]', pos: 0 },
+                { id: 2, name: playerNames[1], color: 'bg-[#6b9add]', pos: 0 }
+            ]);
+            const [activePlayerIdx, setActivePlayerIdx] = useState(0);
+            const [isRolling, setIsRolling] = useState(false);
+            const [diceNum, setDiceNum] = useState(1);
+            const [showModal, setShowModal] = useState(false);
+            const [currentAction, setCurrentAction] = useState("");
+
+            // 自定义弹窗状态
+            const [customModal, setCustomModal] = useState({ show: false, type: 'alert', title: '', message: '', inputValue: '', onConfirm: null, onCancel: null });
+
+            // 显示自定义确认弹窗
+            const showConfirm = (title, message, onConfirm) => {
+                setCustomModal({ show: true, type: 'confirm', title, message, inputValue: '', onConfirm, onCancel: null });
+            };
+
+            // 显示自定义提示弹窗
+            const showAlert = (title, message, onConfirm) => {
+                setCustomModal({ show: true, type: 'alert', title, message, inputValue: '', onConfirm, onCancel: null });
+            };
+
+            // 显示自定义输入弹窗
+            const showInput = (title, message, defaultValue, onConfirm) => {
+                setCustomModal({ show: true, type: 'input', title, message, inputValue: defaultValue, onConfirm, onCancel: null });
+            };
+
+            // 关闭自定义弹窗
+            const closeCustomModal = () => {
+                setCustomModal({ ...customModal, show: false });
+            };
+
+            // 音乐状态 (实际开关由 settings.music 控制)
+            const [musicPlaying, setMusicPlaying] = useState(false);
+            const audioRef = useRef(null);
+            const diceSoundRef = useRef(null);
+            const moveSoundRef = useRef(null);
+
+            // 获取资源路径
+            const getAssetPath = (filename) => {
+                // Web 路径 - 去掉可能存在的 ./
+                const cleanName = filename.replace(/^\.\//, '');
+                return `./${cleanName}`;
+            };
+
+            // 音乐播放控制
+            useEffect(() => {
+                if (!audioRef.current) {
+                    audioRef.current = new Audio(getAssetPath('1.mp3'));
+                    audioRef.current.loop = true;
+                }
+
+                if (settings.music) {
+                    if (musicPlaying) {
+                        audioRef.current.play().catch(() => {});
+                    } else {
+                        audioRef.current.pause();
+                    }
+                } else {
+                    audioRef.current.pause();
+                }
+            }, [musicPlaying, settings.music]);
+
+            // 播放音效
+            const playSound = (soundPath) => {
+                if (!settings.sound) return;
+
+                // 直接创建新的Audio对象以确保能播放
+                const audio = new Audio(getAssetPath(soundPath));
+                audio.play().catch(() => {});
+            };
+
+            // 设置编辑临时状态
+            const [editingNames, setEditingNames] = useState([...playerNames]);
+
+            // 进入设置页面时初始化编辑状态
+            const openSettings = () => {
+                setEditingNames([...playerNames]);
+                setScreen('settings');
+            };
+
+            // 同步玩家名称
+            useEffect(() => {
+                setPlayers([
+                    { id: 1, name: playerNames[0], color: 'bg-[#ff7b9c]', pos: players[0].pos },
+                    { id: 2, name: playerNames[1], color: 'bg-[#6b9add]', pos: players[1].pos }
+                ]);
+            }, [playerNames]);
+
+            // 保存设置到 localStorage
+            const updatePlayerNames = (names) => {
+                setPlayerNames(names);
+                storage.set('playerNames', names);
+            };
+
+            const updateSettings = (newSettings) => {
+                setSettings(newSettings);
+                storage.set('settings', newSettings);
+            };
+
+            const saveScript = (name, tiles) => {
+                const newScript = {
+                    id: Date.now(),
+                    name,
+                    tiles: [...tiles],
+                    createdAt: new Date().toLocaleDateString('zh-CN')
+                };
+                const updated = [...savedScripts, newScript];
+                setSavedScripts(updated);
+                storage.set('savedScripts', updated);
+            };
+
+            const deleteScript = (id) => {
+                const updated = savedScripts.filter(s => s.id !== id);
+                setSavedScripts(updated);
+                storage.set('savedScripts', updated);
+            };
+
+            const loadScript = (script) => {
+                setCustomTiles([...script.tiles]);
+                setMode('custom');
+                setScreen('home');
+            };
+
+            // 获取当前题库
+            const getActiveTiles = () => {
+                if (mode === 'simple') return simpleTiles;
+                if (mode === 'hard') return hardTiles;
+                return customTiles;
+            };
+
+            // 星光粒子背景组件
+            const Particles = () => {
+                return (
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                        {[...Array(20)].map((_, i) => (
+                            <div key={i} className="absolute rounded-full bg-pink-200/40"
+                                style={{
+                                    width: Math.random() * 4 + 1 + 'px',
+                                    height: Math.random() * 4 + 1 + 'px',
+                                    top: Math.random() * 100 + '%',
+                                    left: Math.random() * 100 + '%',
+                                    animation: `float ${Math.random() * 4 + 3}s ease-in-out infinite`,
+                                    animationDelay: `${Math.random() * 2}s`
+                                }}
+                            />
+                        ))}
+                    </div>
+                );
+            };
+
+            // --- 页面：首页模式选择 ---
+            const renderHome = () => (
+                <div className="flex flex-col items-center justify-center w-full h-full p-6 relative z-10">
+                    {/* 顶部图标 */}
+                    <div className="absolute top-6 left-6 right-6 flex justify-between">
+                        <button onClick={() => {
+                            if (!settings.music) {
+                                updateSettings({ ...settings, music: true });
+                            }
+                            setMusicPlaying(!musicPlaying);
+                        }} className="p-2 glass-card rounded-full text-pink-200 hover:text-white transition">
+                            {musicPlaying ? (
+                                <IconMusicNote className="w-5 h-5 opacity-100 glow-text" />
+                            ) : (
+                                <IconMusicNote className="w-5 h-5 opacity-50" />
+                            )}
+                        </button>
+                        <div className="flex space-x-2">
+                            <button onClick={() => setScreen('scripts')} className="p-2 glass-card rounded-full text-pink-200 hover:text-white transition">
+                                <IconList className="w-5 h-5" />
+                            </button>
+                            <button onClick={openSettings} className="p-2 glass-card rounded-full text-pink-200 hover:text-white transition">
+                                <IconSettings className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 标题 */}
+                    <div className="text-center mb-12 animate-float">
+                        <h1 className="text-4xl font-serif-sc mb-2 glow-text tracking-widest text-[#ffd1dc]">飞行棋</h1>
+                        <p className="text-sm font-light text-pink-200/60 italic font-serif">A Romantic Night</p>
+                    </div>
+
+                    {/* 模式选择卡片 */}
+                    <div className="flex flex-row space-x-4 w-full justify-center mt-4">
+                        {/* 微醺 */}
+                        <div onClick={() => setMode('simple')} 
+                             className={`flex-1 max-w-[110px] aspect-[2/3] rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${mode === 'simple' ? 'glass-card-active scale-105' : 'glass-card opacity-70'}`}>
+                            <h2 className="text-xl font-serif-sc text-white mb-1">微醺</h2>
+                            <p className="text-xs text-pink-200/70 font-serif">Gentle</p>
+                        </div>
+                        {/* 沉沦 */}
+                        <div onClick={() => setMode('hard')} 
+                             className={`flex-1 max-w-[110px] aspect-[2/3] rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform ${mode === 'hard' ? 'glass-card-active scale-110 z-10' : 'glass-card opacity-70 mt-4'}`}>
+                            <h2 className="text-2xl font-serif-sc text-white mb-1">沉沦</h2>
+                            <p className="text-xs text-rose-300/70 font-serif">Intense</p>
+                        </div>
+                        {/* 专属 */}
+                        <div onClick={() => setMode('custom')} 
+                             className={`flex-1 max-w-[110px] aspect-[2/3] rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${mode === 'custom' ? 'glass-card-active scale-105' : 'glass-card opacity-70'}`}>
+                            <h2 className="text-xl font-serif-sc text-white mb-1">专属</h2>
+                            <p className="text-xs text-pink-200/70 font-serif">Custom</p>
+                        </div>
+                    </div>
+
+                    {/* 自定义模式的编辑按钮 */}
+                    {mode === 'custom' && (
+                        <button onClick={() => setScreen('editor')} className="mt-6 flex items-center text-sm text-pink-300 hover:text-white transition">
+                            <IconEdit className="w-4 h-4 mr-1" /> 编辑专属题库
+                        </button>
+                    )}
+
+                    {/* 开始按钮 */}
+                    <div className="absolute bottom-16">
+                        <button onClick={startGame} className="relative group">
+                            <div className="absolute inset-0 bg-rose-400 rounded-full blur-md opacity-40 group-hover:opacity-60 transition duration-500"></div>
+                            <div className="relative glass-card-active rounded-full w-20 h-20 flex items-center justify-center animate-heartbeat">
+                                <IconHeart className="w-8 h-8 text-rose-300" />
+                            </div>
+                            <p className="text-center mt-3 text-sm text-pink-200/80 tracking-widest font-serif-sc">开始游戏</p>
+                        </button>
+                    </div>
+                </div>
+            );
+
+            // --- 页面：自定义题库编辑器 ---
+            const renderEditor = () => (
+                <div className="w-full h-full flex flex-col bg-[#0f0514] z-20">
+                    <div className="p-4 glass-card flex items-center justify-between sticky top-0 z-30">
+                        <button onClick={() => setScreen('home')} className="p-2 text-pink-200">
+                            <IconChevronLeft className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-lg font-serif-sc text-white glow-text">编辑专属格子</h2>
+                        <div className="w-10"></div> {/* 占位平衡 */}
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3 pb-24">
+                        {customTiles.map((tile, idx) => (
+                            <div key={idx} className="flex items-center glass-card rounded-xl p-3">
+                                <span className="text-rose-300 font-bold w-8 text-sm">{idx + 1}.</span>
+                                <input 
+                                    type="text" 
+                                    value={tile}
+                                    onChange={(e) => {
+                                        const newTiles = [...customTiles];
+                                        newTiles[idx] = e.target.value;
+                                        setCustomTiles(newTiles);
+                                    }}
+                                    className="flex-1 bg-transparent border-b border-pink-300/30 text-white text-sm focus:outline-none focus:border-pink-300 px-2 py-1"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 glass-card flex space-x-2">
+                        <button onClick={() => {
+                            showInput('保存剧本', '请输入剧本名称:', `专属剧本 ${savedScripts.length + 1}`, (name) => {
+                                saveScript(name, customTiles);
+                            });
+                        }} className="flex-1 py-3 rounded-xl glass-card text-pink-200 font-serif-sc tracking-widest flex items-center justify-center">
+                            <IconSave className="w-4 h-4 mr-2" /> 保存剧本
+                        </button>
+                        <button onClick={() => setScreen('home')} className="flex-1 py-3 rounded-xl glass-card-active text-white font-serif-sc tracking-widest">
+                            返回
+                        </button>
+                    </div>
+                </div>
+            );
+
+            // --- 页面：设置 ---
+            const renderSettings = () => {
+                return (
+                    <div className="w-full h-full flex flex-col bg-[#0f0514] z-20">
+                        <div className="p-4 glass-card flex items-center justify-between sticky top-0 z-30">
+                            <button onClick={() => setScreen('home')} className="p-2 text-pink-200">
+                                <IconChevronLeft className="w-6 h-6" />
+                            </button>
+                            <h2 className="text-lg font-serif-sc text-white glow-text">设置</h2>
+                            <div className="w-10"></div>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                            {/* 玩家名称设置 */}
+                            <div className="glass-card rounded-2xl p-5">
+                                <h3 className="text-base font-serif-sc text-white mb-4 glow-text">玩家名称</h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-center">
+                                        <span className="text-rose-300 w-8">玩家一</span>
+                                        <input
+                                            type="text"
+                                            value={editingNames[0]}
+                                            onChange={(e) => {
+                                                const newNames = [...editingNames];
+                                                newNames[0] = e.target.value;
+                                                setEditingNames(newNames);
+                                            }}
+                                            className="flex-1 bg-transparent border-b border-pink-300/30 text-white text-center focus:outline-none focus:border-pink-300 px-3 py-2"
+                                            placeholder="玩家一"
+                                        />
+                                    </div>
+                                    <div className="flex items-center">
+                                        <span className="text-blue-300 w-8">玩家二</span>
+                                        <input
+                                            type="text"
+                                            value={editingNames[1]}
+                                            onChange={(e) => {
+                                                const newNames = [...editingNames];
+                                                newNames[1] = e.target.value;
+                                                setEditingNames(newNames);
+                                            }}
+                                            className="flex-1 bg-transparent border-b border-pink-300/30 text-white text-center focus:outline-none focus:border-pink-300 px-3 py-2"
+                                            placeholder="玩家二"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 音乐设置 */}
+                            <div className="glass-card rounded-2xl p-5">
+                                <h3 className="text-base font-serif-sc text-white mb-4 glow-text">音乐与音效</h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-pink-200">背景音乐</span>
+                                        <button
+                                            onClick={() => {
+                                                const newMusicState = !settings.music;
+                                                updateSettings({ ...settings, music: newMusicState });
+                                                if (newMusicState) {
+                                                    setMusicPlaying(true);
+                                                } else {
+                                                    setMusicPlaying(false);
+                                                }
+                                            }}
+                                            className={`w-14 h-8 rounded-full transition-all ${settings.music ? 'bg-rose-500' : 'bg-gray-600'}`}
+                                        >
+                                            <div className={`w-6 h-6 rounded-full bg-white transform transition-transform ${settings.music ? 'translate-x-7' : 'translate-x-1'}`} />
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-pink-200">游戏音效</span>
+                                        <button
+                                            onClick={() => updateSettings({ ...settings, sound: !settings.sound })}
+                                            className={`w-14 h-8 rounded-full transition-all ${settings.sound ? 'bg-rose-500' : 'bg-gray-600'}`}
+                                        >
+                                            <div className={`w-6 h-6 rounded-full bg-white transform transition-transform ${settings.sound ? 'translate-x-7' : 'translate-x-1'}`} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-4 glass-card">
+                            <button onClick={() => {
+                                updatePlayerNames(editingNames);
+                                setScreen('home');
+                            }} className="w-full py-3 rounded-xl glass-card-active text-white font-serif-sc tracking-widest">
+                                保存设置
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            // --- 页面：剧本列表 ---
+            const renderScripts = () => (
+                <div className="w-full h-full flex flex-col bg-[#0f0514] z-20">
+                    <div className="p-4 glass-card flex items-center justify-between sticky top-0 z-30">
+                        <button onClick={() => setScreen('home')} className="p-2 text-pink-200">
+                            <IconChevronLeft className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-lg font-serif-sc text-white glow-text">我的剧本</h2>
+                        <div className="w-10"></div>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3 pb-24">
+                        {savedScripts.length === 0 ? (
+                            <div className="text-center py-12 text-pink-200/50">
+                                <IconList className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                                <p>暂无保存的剧本</p>
+                                <p className="text-sm mt-2">在专属模式编辑后可以保存剧本</p>
+                            </div>
+                        ) : (
+                            savedScripts.map((script) => (
+                                <div key={script.id} className="glass-card rounded-xl p-4 flex items-center justify-between">
+                                    <div
+                                        onClick={() => loadScript(script)}
+                                        className="flex-1 cursor-pointer"
+                                    >
+                                        <h4 className="text-white font-serif-sc">{script.name}</h4>
+                                        <p className="text-xs text-pink-200/50 mt-1">{script.createdAt} · {script.tiles.length} 个格子</p>
+                                    </div>
+                                    <div className="flex items-center space-x-1">
+                                        <button
+                                            onClick={() => {
+                                                loadScript(script);
+                                            }}
+                                            className="p-2 text-rose-400 hover:text-rose-300 transition"
+                                            title="开始游戏"
+                                        >
+                                            <IconPlay className="w-5 h-5" />
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                showConfirm('删除剧本', `确定要删除剧本"${script.name}"吗？`, () => deleteScript(script.id));
+                                            }}
+                                            className="p-2 text-pink-300 hover:text-red-400 transition"
+                                        >
+                                            <IconTrash className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 glass-card">
+                        <button onClick={() => setScreen('home')} className="w-full py-3 rounded-xl glass-card-active text-white font-serif-sc tracking-widest">
+                            返回首页
+                        </button>
+                    </div>
+                </div>
+            );
+
+            // --- 页面：游戏面板 ---
+            const renderGame = () => {
+                const tiles = getActiveTiles();
+                // 生成蛇形路径数组用于渲染：每一行5个，偶数行正序，奇数行倒序
+                const rows = [];
+                for (let i = 0; i < 6; i++) {
+                    let row = tiles.slice(i * 5, (i + 1) * 5).map((text, idx) => ({ text, index: i * 5 + idx }));
+                    if (i % 2 === 1) row = row.reverse();
+                    rows.push(row);
+                }
+
+                return (
+                    <div className="w-full h-full flex flex-col relative z-10">
+                        {/* 顶部状态栏 */}
+                        <div className="p-4 flex justify-between items-center glass-card z-20">
+                            <button onClick={resetGame} className="p-2 text-pink-200 hover:text-white transition">
+                                <IconChevronLeft className="w-6 h-6" />
+                            </button>
+                            <div className="flex space-x-6">
+                                {players.map((p, i) => (
+                                    <div key={p.id} className={`flex items-center space-x-2 transition-opacity ${activePlayerIdx === i ? 'opacity-100' : 'opacity-40'}`}>
+                                        <div className={`w-3 h-3 rounded-full ${p.color} shadow-[0_0_8px_currentColor]`}></div>
+                                        <span className="text-sm font-serif-sc">{p.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="w-8"></div>
+                        </div>
+
+                        {/* 棋盘区域 */}
+                        <div className="flex-1 overflow-y-auto p-4 pb-32 flex flex-col justify-center">
+                            <div className="w-full space-y-4">
+                                {rows.map((row, rIdx) => (
+                                    <div key={rIdx} className={`flex justify-between relative`}>
+                                        {/* 绘制连接线 (仅视觉装饰，非SVG完美连线，用CSS简化) */}
+                                        {rIdx < 5 && (
+                                            <div className={`absolute -bottom-4 w-0.5 h-4 bg-rose-300/30 ${rIdx % 2 === 0 ? 'right-6' : 'left-6'}`}></div>
+                                        )}
+                                        {row.map((cell) => {
+                                            const isStart = cell.index === 0;
+                                            const isEnd = cell.index === 29;
+                                            // 检查哪些玩家在这个格子上
+                                            const cellPlayers = players.filter(p => p.pos === cell.index);
+
+                                            return (
+                                                <div key={cell.index} className="relative flex flex-col items-center">
+                                                    {/* 格子本体 */}
+                                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xs border relative z-10
+                                                        ${isStart || isEnd ? 'border-rose-400 bg-rose-500/20' : 'border-rose-300/30 glass-card path-node'}`}>
+                                                        {isStart ? '起' : isEnd ? '终' : cell.index + 1}
+                                                    </div>
+
+                                                    {/* 玩家棋子 */}
+                                                    {cellPlayers.length > 0 && (
+                                                        <div className="absolute -top-2 -right-2 flex space-x-1 z-20">
+                                                            {cellPlayers.map(p => (
+                                                                <div key={p.id} className={`w-4 h-4 rounded-full ${p.color} border border-white/50 shadow-[0_0_10px_currentColor] animate-bounce`} style={{animationDuration: '1s'}}></div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                        {/* 横向连接线 */}
+                                        <div className="absolute top-1/2 left-6 right-6 h-0.5 bg-rose-300/20 -z-10 transform -translate-y-1/2"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 底部控制台：掷骰子 */}
+                        <div className="absolute bottom-0 left-0 right-0 p-6 glass-card flex justify-center items-center z-20 rounded-t-3xl border-t border-rose-300/20">
+                            <div className="flex flex-col items-center">
+                                <p className="text-sm font-serif-sc text-rose-200 mb-4">
+                                    轮到 <span className="font-bold text-white glow-text">{players[activePlayerIdx].name}</span>
+                                </p>
+                                <button 
+                                    onClick={rollDice} 
+                                    disabled={isRolling}
+                                    className={`w-16 h-16 rounded-2xl glass-card-active flex items-center justify-center text-3xl font-bold font-serif shadow-lg ${isRolling ? 'animate-roll pointer-events-none' : ''}`}
+                                >
+                                    {isRolling ? '?' : diceNum}
+                                </button>
+                                <p className="text-xs text-pink-200/50 mt-3">点击掷骰子</p>
+                            </div>
+                        </div>
+
+                        {/* 动作弹窗 Modal */}
+                        {showModal && (
+                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+                                <div className="glass-card-active w-full max-w-sm p-8 rounded-3xl flex flex-col items-center text-center animate-float" style={{animationDuration: '3s'}}>
+                                    <IconHeart className="w-12 h-12 text-rose-400 mb-4 drop-shadow-[0_0_15px_rgba(251,113,133,0.8)]" />
+                                    <h3 className="text-xl font-serif-sc text-white mb-6 leading-relaxed glow-text">
+                                        {currentAction}
+                                    </h3>
+                                    <button 
+                                        onClick={closeModalAndNextTurn}
+                                        className="px-8 py-3 rounded-full bg-gradient-to-r from-rose-500/40 to-purple-600/40 border border-rose-300/30 text-white font-serif-sc hover:bg-rose-500/50 transition w-full"
+                                    >
+                                        完成
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                );
+            };
+
+            // --- 游戏逻辑 ---
+            const startGame = () => {
+                setPlayers([
+                    { ...players[0], pos: 0 },
+                    { ...players[1], pos: 0 }
+                ]);
+                setActivePlayerIdx(0);
+                setScreen('game');
+            };
+
+            const resetGame = () => {
+                showConfirm('返回主页', '确定要返回主页吗？游戏进度将丢失。', () => setScreen('home'));
+            };
+
+            const rollDice = () => {
+                if (isRolling) return;
+                setIsRolling(true);
+
+                // 播放掷骰子音效
+                playSound('./dice.mp3');
+
+                // 模拟掷骰子动画时间
+                setTimeout(() => {
+                    const result = Math.floor(Math.random() * 6) + 1;
+                    setDiceNum(result);
+                    setIsRolling(false);
+                    movePlayer(result);
+                }, 600);
+            };
+
+            const movePlayer = (steps) => {
+                const tiles = getActiveTiles();
+                const newPlayers = [...players];
+                let currentPos = newPlayers[activePlayerIdx].pos;
+                let newPos = currentPos + steps;
+
+                // 检查进退逻辑 (简单解析文本中的指令)
+                if (newPos >= 29) {
+                    newPos = 29; // 到达终点
+                }
+
+                newPlayers[activePlayerIdx].pos = newPos;
+                setPlayers(newPlayers);
+
+                // 播放移动到位音效
+                playSound('./move.mp3');
+
+                // 弹出动作指示
+                const actionText = tiles[newPos];
+                
+                // 处理“进/退”逻辑嵌套
+                setTimeout(() => {
+                    if (actionText.includes("进2格")) {
+                         setCurrentAction(`${actionText} (即将自动前进2格)`);
+                    } else if (actionText.includes("进1格")) {
+                         setCurrentAction(`${actionText} (即将自动前进1格)`);
+                    } else if (actionText.includes("退1格")) {
+                         setCurrentAction(`${actionText} (即将自动后退1格)`);
+                    } else if (actionText.includes("退2格")) {
+                         setCurrentAction(`${actionText} (即将自动后退2格)`);
+                    } else {
+                         setCurrentAction(actionText);
+                    }
+                    setShowModal(true);
+                }, 500); // 等待移动动画（视觉上）完成后弹窗
+            };
+
+            const closeModalAndNextTurn = () => {
+                setShowModal(false);
+                
+                // 处理特殊的进退逻辑
+                const tiles = getActiveTiles();
+                let currentPos = players[activePlayerIdx].pos;
+                let newPos = currentPos;
+                const actionText = currentAction;
+
+                if (actionText.includes("进2格")) newPos += 2;
+                else if (actionText.includes("进1格")) newPos += 1;
+                else if (actionText.includes("退1格")) newPos -= 1;
+                else if (actionText.includes("退2格")) newPos -= 2;
+
+                if (newPos !== currentPos) {
+                    if (newPos < 0) newPos = 0;
+                    if (newPos > 29) newPos = 29;
+                    const newPlayers = [...players];
+                    newPlayers[activePlayerIdx].pos = newPos;
+                    setPlayers(newPlayers);
+                    
+                    // 如果因为进退再次踩到新格子，为了简化游戏体验，不二次触发弹窗，直接切换回合
+                }
+
+                // 检查是否到达终点
+                if (newPos >= 29) {
+                    // 游戏结束提示
+                    setTimeout(() => {
+                        showAlert('游戏胜利', `恭喜 ${players[activePlayerIdx].name} 到达终点！今夜听你的~`, () => setScreen('home'));
+                    }, 500);
+                    return;
+                }
+
+                // 切换玩家
+                setActivePlayerIdx(activePlayerIdx === 0 ? 1 : 0);
+            };
+
+            // --- 自定义弹窗组件 ---
+            const renderCustomModal = () => {
+                if (!customModal.show) return null;
+
+                return (
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-6">
+                        <div className="glass-card-active w-full max-w-sm p-6 rounded-3xl animate-float" style={{animationDuration: '0.3s'}}>
+                            <h3 className="text-xl font-serif-sc text-white mb-4 text-center glow-text">
+                                {customModal.title}
+                            </h3>
+                            {customModal.type === 'input' ? (
+                                <>
+                                    <p className="text-pink-200 text-center mb-4 leading-relaxed">
+                                        {customModal.message}
+                                    </p>
+                                    <input
+                                        type="text"
+                                        value={customModal.inputValue}
+                                        onChange={(e) => setCustomModal({...customModal, inputValue: e.target.value})}
+                                        className="w-full bg-white/10 border border-pink-300/30 rounded-xl px-4 py-3 text-white text-center focus:outline-none focus:border-pink-300 mb-4"
+                                        placeholder="请输入剧本名称"
+                                        autoFocus
+                                    />
+                                    <div className="flex space-x-3">
+                                        <button
+                                            onClick={closeCustomModal}
+                                            className="flex-1 py-3 rounded-full glass-card text-pink-200 font-serif-sc"
+                                        >
+                                            取消
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                const value = customModal.inputValue;
+                                                closeCustomModal();
+                                                if (customModal.onConfirm && value.trim()) {
+                                                    customModal.onConfirm(value.trim());
+                                                }
+                                            }}
+                                            className="flex-1 py-3 rounded-full bg-gradient-to-r from-rose-500/60 to-purple-600/60 border border-rose-300/30 text-white font-serif-sc"
+                                        >
+                                            保存
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="text-pink-200 text-center mb-6 leading-relaxed">
+                                        {customModal.message}
+                                    </p>
+                                    <div className="flex space-x-3">
+                                        {customModal.type === 'confirm' && (
+                                            <button
+                                                onClick={() => {
+                                                    closeCustomModal();
+                                                    if (customModal.onCancel) customModal.onCancel();
+                                                }}
+                                                className="flex-1 py-3 rounded-full glass-card text-pink-200 font-serif-sc"
+                                            >
+                                                取消
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={() => {
+                                                closeCustomModal();
+                                                if (customModal.onConfirm) customModal.onConfirm();
+                                            }}
+                                            className="flex-1 py-3 rounded-full bg-gradient-to-r from-rose-500/60 to-purple-600/60 border border-rose-300/30 text-white font-serif-sc"
+                                        >
+                                            确定
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            return (
+                <div className="w-full h-full relative">
+                    <Particles />
+                    {screen === 'home' && renderHome()}
+                    {screen === 'editor' && renderEditor()}
+                    {screen === 'settings' && renderSettings()}
+                    {screen === 'scripts' && renderScripts()}
+                    {screen === 'game' && renderGame()}
+                    {renderCustomModal()}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-100 font-sans;
+    background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+@layer components {
+  .neo-card {
+    @apply bg-white border-4 border-black shadow-neo transition-all duration-200;
+  }
+
+  .neo-card:hover {
+    @apply -translate-x-1 -translate-y-1 shadow-neo-hover;
+  }
+
+  .neo-button {
+    @apply border-[3px] border-black shadow-neo-sm transition-all duration-100;
+  }
+
+  .neo-button:active {
+    @apply translate-x-[2px] translate-y-[2px] shadow-none;
+  }
+
+  .active-nav {
+    @apply bg-yellow-400;
+  }
+
+  .nav-link {
+    @apply inline-block;
+  }
+
+  .page-section {
+    @apply block;
+  }
+
+  .page-section.hidden {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .rotate-\[3deg\] {
+    transform: rotate(3deg);
+  }
+
+  .-rotate-\[2deg\] {
+    transform: rotate(-2deg);
+  }
+
+  .-rotate-\[10deg\] {
+    transform: rotate(-10deg);
+  }
+}
