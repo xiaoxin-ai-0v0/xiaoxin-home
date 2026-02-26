@@ -20,9 +20,7 @@ jobs:
         run: rm -f package-lock.json && npm install
 
       - name: Build
-        run: |
-          sed -i "s/integrations: \[tailwind()\]/integrations: [tailwind()],\n  base: '\/xiaoxin-home'/" astro.config.mjs
-          npm run build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
