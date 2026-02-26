@@ -1,5 +1,9 @@
 {
-  "buildCommand": "VERCEL=true npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "astro"
+  "framework": "astro",
+  "rewrites": [
+    { "source": "/xiaoxin-home/:path*", "destination": "/:path" },
+    { "source": "/(.*)", "destination": "/xiaoxin-home/" }
+  ]
 }
