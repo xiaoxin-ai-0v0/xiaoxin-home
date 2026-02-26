@@ -6,4 +6,5 @@ const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true';
 export default defineConfig({
   integrations: [tailwind()],
   base: isVercel ? '' : '/xiaoxin-home',
+  trailingSlash: 'always',
 });
