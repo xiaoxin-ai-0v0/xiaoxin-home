@@ -20,7 +20,10 @@ jobs:
         run: rm -f package-lock.json && npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          npm pkg set astro.config.mjs.base="/xiaoxin-home"
+          npm run build
+          npm pkg delete astro.config.mjs.base
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
