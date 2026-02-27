@@ -79,6 +79,15 @@ const baseUrl = '';
 
       // 初始化显示页面
       function initPage() {
+        const path = window.location.pathname;
+        // 如果是博客详情页，不选中任何导航
+        if (path.startsWith('/blog/')) {
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('bg-yellow-400');
+          });
+          return;
+        }
+
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page');
         if (page && ['home', 'about', 'blog', 'video', 'product'].includes(page)) {
