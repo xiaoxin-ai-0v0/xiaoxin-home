@@ -23,6 +23,10 @@
     @apply border-[3px] border-black shadow-neo-sm transition-all duration-100;
   }
 
+  .neo-button:hover {
+    @apply -translate-x-1 -translate-y-1 shadow-neo-hover;
+  }
+
   .neo-button:active {
     @apply translate-x-[2px] translate-y-[2px] shadow-none;
   }
