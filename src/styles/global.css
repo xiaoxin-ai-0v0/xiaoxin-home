@@ -3,32 +3,107 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg: #fff9ef;
+    --ink: #131313;
+    --muted: #5c5c5c;
+    --line: #111827;
+    --brand-1: #ffbf3c;
+    --brand-2: #5cc8ff;
+    --brand-3: #ff7f59;
+    --surface: rgba(255, 255, 255, 0.9);
+    --surface-2: rgba(255, 245, 224, 0.88);
+    --shadow-hard: 0 10px 0 #111827;
+    --shadow-soft: 0 16px 45px rgba(20, 26, 41, 0.2);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-gray-100 font-sans;
-    background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
-    background-size: 40px 40px;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, rgba(255, 191, 60, 0.4), transparent 30%),
+      radial-gradient(circle at 90% 0%, rgba(92, 200, 255, 0.28), transparent 32%),
+      radial-gradient(circle at 55% 90%, rgba(255, 127, 89, 0.2), transparent 35%),
+      linear-gradient(160deg, #fffdf7 0%, var(--bg) 100%);
+    font-family: "Space Grotesk", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Clash Display", "Space Grotesk", "Noto Sans SC", sans-serif;
+    letter-spacing: 0.01em;
   }
 }
 
 @layer components {
   .neo-card {
-    @apply bg-white border-4 border-black shadow-neo transition-all duration-200;
+    border: 2px solid var(--line);
+    border-radius: 22px;
+    background: linear-gradient(155deg, var(--surface), rgba(255, 255, 255, 0.76));
+    box-shadow: var(--shadow-hard), var(--shadow-soft);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
   }
 
   .neo-card:hover {
-    @apply -translate-x-1 -translate-y-1 shadow-neo-hover;
+    transform: translateY(-4px);
+    box-shadow: 0 14px 0 #111827, 0 24px 55px rgba(16, 24, 38, 0.22);
+    border-color: #0f172a;
   }
 
   .neo-button {
-    @apply border-[3px] border-black shadow-neo-sm transition-all duration-100;
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 6px 0 #101826;
+    transition: transform 130ms ease, box-shadow 130ms ease, filter 130ms ease;
   }
 
   .neo-button:hover {
-    @apply -translate-x-1 -translate-y-1 shadow-neo-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 0 #101826;
+    filter: brightness(1.02);
   }
 
   .neo-button:active {
-    @apply translate-x-[2px] translate-y-[2px] shadow-none;
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #101826;
+  }
+
+  .surface-tint {
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.9), var(--surface-2));
+  }
+
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 2px solid var(--line);
+    background: #fff6d8;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .headline-display {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    line-height: 1.02;
+  }
+
+  .chip {
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    background: #ffffff;
+    padding: 4px 10px;
+    font-weight: 700;
+    font-size: 12px;
   }
 
   .active-nav {
@@ -49,6 +124,18 @@
 }
 
 @layer utilities {
+  .page-shell > * {
+    animation: rise-in 500ms ease both;
+  }
+
+  .page-shell > *:nth-child(2) { animation-delay: 80ms; }
+  .page-shell > *:nth-child(3) { animation-delay: 140ms; }
+  .page-shell > *:nth-child(4) { animation-delay: 200ms; }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
   .rotate-\[3deg\] {
     transform: rotate(3deg);
   }
@@ -59,5 +146,16 @@
 
   .-rotate-\[10deg\] {
     transform: rotate(-10deg);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

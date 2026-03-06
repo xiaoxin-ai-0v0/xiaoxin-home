@@ -18,7 +18,8 @@ const timeline = [
 ---
 
 <Layout title="关于我 | 小新的个人网站" description="关于小新的技能结构、成长路径与近期方向。">
-  <section class="neo-card p-8 md:p-12 bg-white">
+  <section class="neo-card surface-tint p-8 md:p-12">
+    <p class="section-kicker mb-4">about</p>
     <h1 class="text-4xl font-black">关于我</h1>
     <p class="mt-5 text-lg text-gray-700 leading-relaxed">
       我是小新，关注 Web 开发、AI 应用与产品化实践。这个网站的目标是持续展示“正在做什么、做到了什么、下一步做什么”。
@@ -26,7 +27,7 @@ const timeline = [
   </section>
 
   <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-    <article class="neo-card p-6 bg-white">
+    <article class="neo-card p-6 bg-white/90">
       <h2 class="text-2xl font-black mb-4">技能结构</h2>
       <div class="space-y-4">
         {skills.map((s) => (
@@ -39,7 +40,7 @@ const timeline = [
         ))}
       </div>
     </article>
-    <article class="neo-card p-6 bg-white">
+    <article class="neo-card p-6 bg-white/90">
       <h2 class="text-2xl font-black mb-4">设备与工作流</h2>
       <ul class="space-y-2 text-gray-700 font-medium">
         <li>MacBook + 外接显示器</li>
@@ -50,7 +51,7 @@ const timeline = [
     </article>
   </section>
 
-  <section class="neo-card p-6 bg-white mt-8">
+  <section class="neo-card p-6 bg-white/90 mt-8">
     <h2 class="text-2xl font-black mb-4">成长时间线</h2>
     <div class="space-y-4">
       {timeline.map((item) => (

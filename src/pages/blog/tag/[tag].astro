@@ -11,12 +11,14 @@ export async function getStaticPaths() {
 const { tag } = Astro.props;
 const posts = (await getCollection('blog', ({ data }) => !data.draft && (data.tags ?? []).includes(tag)))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${basePath}${path}`);
 ---
 
 <Layout title={`标签：${tag} | 博客`} description={`博客标签 ${tag} 下的文章列表。`}>
   <section class="neo-card p-8 bg-white">
     <h1 class="text-4xl font-black">标签：#{tag}</h1>
-    <a href="/blog" class="inline-block mt-4 neo-button px-4 py-2 rounded font-bold bg-white">返回博客首页</a>
+    <a href={withBase('/blog')} class="inline-block mt-4 neo-button px-4 py-2 rounded font-bold bg-white">返回博客首页</a>
   </section>
 
   <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -25,7 +27,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && (data.ta
         <p class="text-xs font-bold text-gray-500">{post.data.category} · {post.data.date.toLocaleDateString('zh-CN')}</p>
         <h2 class="text-2xl font-black mt-2">{post.data.title}</h2>
         <p class="mt-2 text-gray-700">{post.data.description}</p>
-        <a href={`/blog/${post.slug}`} class="inline-block mt-5 neo-button px-4 py-2 rounded font-bold bg-black text-white">阅读全文</a>
+        <a href={withBase(`/blog/${post.slug}`)} class="inline-block mt-5 neo-button px-4 py-2 rounded font-bold bg-black text-white">阅读全文</a>
       </article>
     ))}
   </section>

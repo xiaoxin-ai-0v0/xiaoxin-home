@@ -7,37 +7,40 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
 const categories = [...new Set(posts.map((post) => post.data.category))];
 const tags = [...new Set(posts.flatMap((post) => post.data.tags ?? []))].sort();
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${basePath}${path}`);
 ---
 
 <Layout title="博客 | 小新的个人网站" description="技术、生活与随笔内容，支持搜索、分类与标签浏览。">
-  <section class="neo-card p-8 bg-white">
+  <section class="neo-card surface-tint p-8">
+    <p class="section-kicker mb-4">blog</p>
     <h1 class="text-4xl font-black">博客</h1>
     <p class="mt-3 text-gray-700">按关键词、分类、标签快速定位文章。</p>
 
     <div class="mt-5">
-      <input id="blog-search" type="search" placeholder="搜索标题或描述..." class="w-full md:w-96 border-4 border-black rounded px-4 py-2 font-medium" />
+      <input id="blog-search" type="search" placeholder="搜索标题或描述..." class="w-full md:w-96 border-2 border-black rounded-xl px-4 py-2 font-medium bg-white/90" />
     </div>
 
     <div class="mt-5 flex flex-wrap gap-2">
-      <a href="/blog" class="neo-button px-3 py-2 rounded font-bold bg-yellow-400">全部</a>
-      {categories.map((cat) => <a href={`/blog/category/${encodeURIComponent(cat)}`} class="neo-button px-3 py-2 rounded font-bold bg-white">{cat}</a>)}
+      <a href={withBase('/blog')} class="neo-button px-3 py-2 rounded font-bold bg-yellow-400">全部</a>
+      {categories.map((cat) => <a href={withBase(`/blog/category/${encodeURIComponent(cat)}`)} class="neo-button px-3 py-2 rounded font-bold bg-white">{cat}</a>)}
     </div>
     <div class="mt-3 flex flex-wrap gap-2">
-      {tags.map((tag) => <a href={`/blog/tag/${encodeURIComponent(tag)}`} class="px-2 py-1 text-xs border-2 border-black rounded-full bg-white font-bold">#{tag}</a>)}
+      {tags.map((tag) => <a href={withBase(`/blog/tag/${encodeURIComponent(tag)}`)} class="chip">#{tag}</a>)}
     </div>
   </section>
 
   <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8" id="post-list">
     {
       posts.map((post) => (
-        <article class="neo-card p-6 bg-white post-item">
+        <article class="neo-card p-6 bg-white/90 post-item">
           <p class="text-xs font-bold text-gray-500">{post.data.category} · {post.data.date.toLocaleDateString('zh-CN')}</p>
           <h2 class="text-2xl font-black mt-2 post-title">{post.data.title}</h2>
           <p class="mt-2 text-gray-700 post-desc">{post.data.description}</p>
           <div class="mt-4 flex flex-wrap gap-2">
-            {(post.data.tags ?? []).map((tag) => <span class="px-2 py-1 text-xs border-2 border-black rounded-full">#{tag}</span>)}
+            {(post.data.tags ?? []).map((tag) => <span class="chip">#{tag}</span>)}
           </div>
-          <a href={`/blog/${post.slug}`} class="inline-block mt-5 neo-button px-4 py-2 rounded font-bold bg-black text-white">阅读全文</a>
+          <a href={withBase(`/blog/${post.slug}`)} class="inline-block mt-5 neo-button px-4 py-2 rounded font-bold bg-black text-white">阅读全文</a>
         </article>
       ))
     }

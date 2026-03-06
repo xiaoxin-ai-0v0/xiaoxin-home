@@ -20,6 +20,12 @@ const {
 const site = Astro.site ?? new URL('https://xiaoxin-ai-0v0.github.io/xiaoxin-home/');
 const canonical = new URL(Astro.url.pathname, site).toString();
 const ogImage = image.startsWith('http') ? image : new URL(image, site).toString();
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => {
+  if (path.startsWith('http')) return path;
+  if (path === '/') return `${basePath}/` || '/';
+  return `${basePath}${path}`;
+};
 const navLinks = [
   { href: '/', label: '首页' },
   { href: '/about', label: '关于' },
@@ -27,7 +33,9 @@ const navLinks = [
   { href: '/blog', label: '博客' },
   { href: '/contact', label: '联系' },
 ];
-const activePath = Astro.url.pathname;
+const activePath = Astro.url.pathname.startsWith(basePath)
+  ? Astro.url.pathname.slice(basePath.length) || '/'
+  : Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -39,7 +47,7 @@ const activePath = Astro.url.pathname;
     <meta name="description" content={description} />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
 
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
@@ -54,7 +62,7 @@ const activePath = Astro.url.pathname;
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
 
     {
       structuredData && (
@@ -62,17 +70,23 @@ const activePath = Astro.url.pathname;
       )
     }
   </head>
-  <body class="grid-bg min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col">
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div class="absolute -top-16 -left-16 h-64 w-64 rounded-full bg-[#ffc85e]/45 blur-3xl"></div>
+      <div class="absolute top-24 -right-20 h-72 w-72 rounded-full bg-[#68d2ff]/35 blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-[#ff8f68]/20 blur-3xl"></div>
+    </div>
+
     <nav class="sticky top-4 z-50 mx-auto max-w-5xl px-4 w-full">
-      <div class="neo-card rounded-full px-6 py-3 flex justify-between items-center bg-white">
-        <a href="/" class="text-2xl font-black hover:text-yellow-500 transition-colors">XIAOXIN</a>
-        <div class="flex gap-2 md:gap-4 font-bold text-sm md:text-base">
+      <div class="neo-card rounded-[999px] px-4 md:px-6 py-3 flex justify-between items-center bg-white/90 backdrop-blur-md">
+        <a href={withBase('/')} class="text-xl md:text-2xl font-black tracking-tight hover:text-[#f97316] transition-colors">XIAOXIN.STUDIO</a>
+        <div class="flex gap-1 md:gap-2 font-bold text-xs md:text-sm">
           {
             navLinks.map((item) => (
               <a
-                href={item.href}
+                href={withBase(item.href)}
                 class:list={[
-                  'nav-link px-3 py-1 rounded-full transition-colors hover:bg-yellow-200',
+                  'nav-link px-2 md:px-3 py-1 rounded-full transition-colors hover:bg-yellow-200/80',
                   { 'bg-yellow-400': activePath === item.href || (item.href !== '/' && activePath.startsWith(item.href)) }
                 ]}
               >
@@ -84,17 +98,17 @@ const activePath = Astro.url.pathname;
       </div>
     </nav>
 
-    <main class="flex-1 max-w-6xl mx-auto px-4 py-12 w-full">
+    <main class="page-shell flex-1 max-w-6xl mx-auto px-4 py-12 w-full">
       <slot />
     </main>
 
-    <footer class="border-t-4 border-black bg-white p-10 shrink-0">
+    <footer class="border-t-2 border-black/80 bg-white/80 backdrop-blur-md p-10 shrink-0">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="font-black text-2xl italic">Build. Learn. Ship.</div>
         <div class="flex gap-6 font-bold">
           <a href="https://github.com/xiaoxin-ai-0v0" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 transition-colors">GitHub</a>
           <a href="https://v.douyin.com/b_pHGZTQXWk/" target="_blank" rel="noopener noreferrer" class="hover:text-pink-500 transition-colors">抖音</a>
-          <a href="/rss.xml" class="hover:text-orange-500 transition-colors">RSS</a>
+          <a href={withBase('/rss.xml')} class="hover:text-orange-500 transition-colors">RSS</a>
         </div>
         <p class="text-sm text-gray-500 font-bold">© 2026 xiaoxin-ai-0v0</p>
       </div>

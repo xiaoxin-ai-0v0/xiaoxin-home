@@ -4,5 +4,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://xiaoxin-ai-0v0.github.io/xiaoxin-home/',
+  base: '/xiaoxin-home',
   integrations: [tailwind(), sitemap()],
 });

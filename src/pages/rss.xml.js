@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 export async function GET(context) {
   const posts = (await getCollection('blog', ({ data }) => !data.draft))
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   return rss({
     title: '小新的博客',
@@ -13,7 +14,7 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: post.data.date,
       description: post.data.description,
-      link: `/blog/${post.slug}/`,
+      link: `${basePath}/blog/${post.slug}/`,
     })),
   });
 }

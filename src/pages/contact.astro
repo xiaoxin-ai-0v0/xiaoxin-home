@@ -9,13 +9,14 @@ const contactItems = [
 ---
 
 <Layout title="联系我 | 小新的个人网站" description="联系方式与合作沟通入口。">
-  <section class="neo-card p-8 md:p-12 bg-white">
+  <section class="neo-card surface-tint p-8 md:p-12">
+    <p class="section-kicker mb-4">contact</p>
     <h1 class="text-4xl font-black">联系我</h1>
     <p class="mt-4 text-gray-700 text-lg">如果你有项目合作、技术交流或内容共创想法，欢迎直接联系。</p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
       {contactItems.map((item) => (
-        <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" class="neo-card p-5 bg-yellow-50 block">
+        <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" class="neo-card p-5 bg-white/90 block">
           <p class="text-sm text-gray-500 font-bold">{item.label}</p>
           <p class="font-black text-lg mt-1 break-all">{item.value}</p>
         </a>

@@ -18,6 +18,8 @@ const structuredData = {
   sameAs: ['https://github.com/xiaoxin-ai-0v0'],
   jobTitle: '开发者'
 };
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${basePath}${path}`);
 ---
 
 <Layout
@@ -25,38 +27,58 @@ const structuredData = {
   description="个人项目、技术博客与创作记录，专注 Web、AI 与小游戏开发。"
   structuredData={structuredData}
 >
-  <section class="neo-card p-8 md:p-12 bg-white">
-    <p class="inline-block bg-purple-300 neo-button px-4 py-1 font-bold rounded-md mb-4">HELLO, I AM XIAOXIN</p>
-    <h1 class="text-4xl md:text-6xl font-black leading-tight">
+  <section class="neo-card surface-tint p-8 md:p-12">
+    <p class="section-kicker mb-4">creative developer</p>
+    <h1 class="headline-display font-black leading-tight text-balance">
       用项目验证想法，
       <span class="underline decoration-yellow-400">用内容沉淀能力</span>
     </h1>
-    <p class="mt-5 text-lg text-gray-700 max-w-3xl">
+    <p class="mt-5 text-lg text-gray-700 max-w-3xl text-balance">
       这里展示我的项目实践、技术文章和创作记录。网站已升级为多页面结构，方便快速浏览与持续更新。
     </p>
     <div class="flex flex-wrap gap-4 mt-8">
-      <a href="/projects" class="neo-button bg-black text-white px-6 py-3 rounded-md font-bold">查看项目</a>
-      <a href="/contact" class="neo-button bg-white text-black px-6 py-3 rounded-md font-bold">联系我</a>
-      <a href="/blog" class="neo-button bg-white text-black px-6 py-3 rounded-md font-bold">阅读博客</a>
+      <a href={withBase('/projects')} class="neo-button bg-black text-white px-6 py-3 rounded-md font-bold">查看项目</a>
+      <a href={withBase('/contact')} class="neo-button bg-white text-black px-6 py-3 rounded-md font-bold">联系我</a>
+      <a href={withBase('/blog')} class="neo-button bg-white text-black px-6 py-3 rounded-md font-bold">阅读博客</a>
+    </div>
+    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="neo-card p-3 bg-white/80"><p class="text-xs font-bold text-gray-500">定位</p><p class="font-black">Web / AI / Game</p></div>
+      <div class="neo-card p-3 bg-white/80"><p class="text-xs font-bold text-gray-500">当前状态</p><p class="font-black">持续创作</p></div>
+      <div class="neo-card p-3 bg-white/80"><p class="text-xs font-bold text-gray-500">内容方向</p><p class="font-black">项目复盘</p></div>
+      <div class="neo-card p-3 bg-white/80"><p class="text-xs font-bold text-gray-500">更新频率</p><p class="font-black">每周</p></div>
+    </div>
+  </section>
+
+  <section class="neo-card p-7 bg-white/90 mt-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <p class="section-kicker mb-3">game highlight</p>
+        <h2 class="text-3xl font-black">飞行棋小游戏</h2>
+        <p class="mt-2 text-gray-700">保留你的飞行棋项目入口，支持一键开玩。</p>
+      </div>
+      <div class="flex gap-3">
+        <a href={withBase('/game/fxq.html')} class="neo-button bg-black text-white px-5 py-3 rounded-md font-bold">开始游戏</a>
+        <a href={withBase('/projects')} class="neo-button bg-white text-black px-5 py-3 rounded-md font-bold">查看项目页</a>
+      </div>
     </div>
   </section>
 
   <section class="mt-12">
     <div class="flex items-center justify-between mb-5">
       <h2 class="text-3xl font-black">代表项目</h2>
-      <a href="/projects" class="font-bold underline">查看全部</a>
+      <a href={withBase('/projects')} class="font-bold underline">查看全部</a>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {
         featuredProjects.map((project) => (
-          <article class="neo-card p-6 bg-white">
+          <article class="neo-card p-6 bg-white/90">
             <p class="text-xs font-bold text-gray-500">{project.data.category}</p>
             <h3 class="text-2xl font-black mt-2">{project.data.title}</h3>
             <p class="mt-3 text-gray-700">{project.data.description}</p>
             <div class="mt-5 flex flex-wrap gap-2">
-              {project.data.tags.slice(0, 3).map((tag) => <span class="px-2 py-1 text-xs border-2 border-black rounded-full">#{tag}</span>)}
+              {project.data.tags.slice(0, 3).map((tag) => <span class="chip">#{tag}</span>)}
             </div>
-            <a href={`/projects/${project.slug}`} class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">项目详情</a>
+            <a href={withBase(`/projects/${project.slug}`)} class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">项目详情</a>
           </article>
         ))
       }
@@ -66,16 +88,16 @@ const structuredData = {
   <section class="mt-12">
     <div class="flex items-center justify-between mb-5">
       <h2 class="text-3xl font-black">最近更新</h2>
-      <a href="/blog" class="font-bold underline">更多文章</a>
+      <a href={withBase('/blog')} class="font-bold underline">更多文章</a>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {
         recentPosts.map((post) => (
-          <article class="neo-card p-6 bg-white">
+          <article class="neo-card p-6 bg-white/90">
             <p class="text-xs font-bold text-gray-500">{post.data.category} · {post.data.date.toLocaleDateString('zh-CN')}</p>
             <h3 class="text-xl font-black mt-2">{post.data.title}</h3>
             <p class="mt-3 text-gray-700">{post.data.description}</p>
-            <a href={`/blog/${post.slug}`} class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">阅读全文</a>
+            <a href={withBase(`/blog/${post.slug}`)} class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">阅读全文</a>
           </article>
         ))
       }
