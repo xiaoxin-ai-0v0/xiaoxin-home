@@ -1,12 +1,33 @@
----
+﻿---
 import '../styles/global.css';
 
 interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  structuredData?: Record<string, unknown>;
 }
 
-const { title } = Astro.props;
-const baseUrl = '';
+const {
+  title,
+  description = '小新的个人网站：项目、博客与创作记录。',
+  image = '/images/ai-wind.png',
+  type = 'website',
+  structuredData
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://xiaoxin-ai-0v0.github.io/xiaoxin-home/');
+const canonical = new URL(Astro.url.pathname, site).toString();
+const ogImage = image.startsWith('http') ? image : new URL(image, site).toString();
+const navLinks = [
+  { href: '/', label: '首页' },
+  { href: '/about', label: '关于' },
+  { href: '/projects', label: '项目' },
+  { href: '/blog', label: '博客' },
+  { href: '/contact', label: '联系' },
+];
+const activePath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -14,24 +35,51 @@ const baseUrl = '';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="小新的个人网站 - 年轻/活泼/创造" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet" />
-    <title>{title}</title>
+
+    {
+      structuredData && (
+        <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+      )
+    }
   </head>
   <body class="grid-bg min-h-screen flex flex-col">
-    <!-- 导航栏 -->
-    <nav class="sticky top-4 z-50 mx-auto max-w-4xl px-4">
+    <nav class="sticky top-4 z-50 mx-auto max-w-5xl px-4 w-full">
       <div class="neo-card rounded-full px-6 py-3 flex justify-between items-center bg-white">
-        <a href={baseUrl + '/'} class="text-2xl font-black hover:text-yellow-500 transition-colors">LOGO</a>
-        <div class="flex gap-4 font-bold text-sm md:text-base">
-          <a href={baseUrl + '/?page=home'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">首页</a>
-          <a href={baseUrl + '/?page=about'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">关于</a>
-          <a href={baseUrl + '/?page=blog'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">文章</a>
-          <a href={baseUrl + '/?page=video'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">视频</a>
-          <a href={baseUrl + '/?page=product'} class="nav-link px-3 py-1 rounded-full hover:bg-yellow-200 transition-colors">产品</a>
+        <a href="/" class="text-2xl font-black hover:text-yellow-500 transition-colors">XIAOXIN</a>
+        <div class="flex gap-2 md:gap-4 font-bold text-sm md:text-base">
+          {
+            navLinks.map((item) => (
+              <a
+                href={item.href}
+                class:list={[
+                  'nav-link px-3 py-1 rounded-full transition-colors hover:bg-yellow-200',
+                  { 'bg-yellow-400': activePath === item.href || (item.href !== '/' && activePath.startsWith(item.href)) }
+                ]}
+              >
+                {item.label}
+              </a>
+            ))
+          }
         </div>
       </div>
     </nav>
@@ -40,63 +88,16 @@ const baseUrl = '';
       <slot />
     </main>
 
-    <!-- 页脚 -->
     <footer class="border-t-4 border-black bg-white p-10 shrink-0">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="font-black text-2xl italic">Stay Creative.</div>
+        <div class="font-black text-2xl italic">Build. Learn. Ship.</div>
         <div class="flex gap-6 font-bold">
-          <a href="https://github.com/xiaoxin-ai-0v0" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 transition-colors">Github</a>
-          <a href="https://v.douyin.com/b_pHGZTQXWk/ " target="_blank" rel="noopener noreferrer" class="hover:text-pink-500 transition-colors">抖音</a>
-          <a href="#" class="hover:text-blue-400 transition-colors">Twitter</a>
+          <a href="https://github.com/xiaoxin-ai-0v0" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 transition-colors">GitHub</a>
+          <a href="https://v.douyin.com/b_pHGZTQXWk/" target="_blank" rel="noopener noreferrer" class="hover:text-pink-500 transition-colors">抖音</a>
+          <a href="/rss.xml" class="hover:text-orange-500 transition-colors">RSS</a>
         </div>
-        <p class="text-sm text-gray-500 font-bold">© 2026 小新的创意空间</p>
+        <p class="text-sm text-gray-500 font-bold">© 2026 xiaoxin-ai-0v0</p>
       </div>
     </footer>
-
-    <script is:inline>
-      function showPage(pageId) {
-        // 隐藏所有页面
-        document.querySelectorAll('.page-section').forEach(section => {
-          section.classList.add('hidden');
-        });
-        // 显示目标页面
-        const targetPage = document.getElementById('page-' + pageId);
-        if (targetPage) {
-          targetPage.classList.remove('hidden');
-        }
-
-        // 更新导航链接样式
-        document.querySelectorAll('.nav-link').forEach(link => {
-          link.classList.remove('bg-yellow-400');
-          if (link.href.includes('page=' + pageId) || (pageId === 'home' && !link.href.includes('page='))) {
-            link.classList.add('bg-yellow-400');
-          }
-        });
-
-        // 滚动到顶部
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      // 初始化显示页面
-      function initPage() {
-        const path = window.location.pathname;
-        // 如果是博客详情页，不选中任何导航
-        if (path.startsWith('/blog/')) {
-          document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('bg-yellow-400');
-          });
-          return;
-        }
-
-        const params = new URLSearchParams(window.location.search);
-        const page = params.get('page');
-        if (page && ['home', 'about', 'blog', 'video', 'product'].includes(page)) {
-          showPage(page);
-        } else {
-          showPage('home');
-        }
-      }
-      initPage();
-    </script>
   </body>
 </html>

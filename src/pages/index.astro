@@ -1,179 +1,84 @@
----
+﻿---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import StatusCards from '../components/StatusCards.astro';
-import SkillCard from '../components/SkillCard.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import VideoCard from '../components/VideoCard.astro';
-import ProductCard from '../components/ProductCard.astro';
-import Meteor from '../components/Meteor.astro';
-import Sparkles from '../components/Sparkles.astro';
 
-const skills = [
-  { name: 'Java', level: 85, color: 'yellow' },
-  { name: 'AI/ML', level: 30, color: 'blue' },
-  { name: 'Spring Boot', level: 80, color: 'green' },
-  { name: 'MySQL', level: 75, color: 'purple' },
-  { name: 'Python', level: 40, color: 'pink' },
-  { name: '前端基础', level: 50, color: 'orange' }
-];
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const projects = (await getCollection('projects'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const equipment = [
-  '💻 笔记本电脑',
-  '🖥️ 显示器',
-  '⌨️ 机械键盘',
-  '🖱️ 无线鼠标',
-  '🎧 降噪耳机'
-];
+const recentPosts = posts.slice(0, 3);
+const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 3);
 
-const timeline = [
-  { year: '2023.01', title: '开始学习 Java', desc: '踏入编程世界' },
-  { year: '2023.07', title: '大学毕业', desc: '踏入社会' },
-  { year: '2026.02', title: 'AI 开发入门', desc: '开始学习 AI 学习' },
-  { year: '未来', title: '持续成长中...', desc: '正在学习 AI 开发ing' }
-];
-
-const articles = [
-  {
-    title: 'Java 学习路线分享',
-    description: '从入门到进阶，我是如何学习 Java 的，包含推荐书籍和项目经验...',
-    date: '2026.01.15',
-    category: '技术',
-    categoryColor: 'blue' as const,
-    slug: 'java-learning'
-  },
-  {
-    title: 'AI 时代，开发者如何转型？',
-    description: '分享我开始学习 AI 开发的初衷和规划，探讨程序员的未来方向。',
-    date: '2026.02.20',
-    category: '技术',
-    categoryColor: 'green' as const,
-    slug: 'ai-transition'
-  },
-  {
-    title: '为什么我从 React 转向了 Astro？',
-    description: '这篇文章详细介绍了 Astro 的岛屿架构如何解决页面性能问题...',
-    date: '2025.10.24',
-    category: '技术',
-    categoryColor: 'blue' as const,
-    slug: 'why-astro'
-  },
-  {
-    title: '如何平衡学习与生活？',
-    description: '在爆肝学习的同时，如何保持身心健康，这是一个严肃的问题。',
-    date: '2025.11.01',
-    category: '生活',
-    categoryColor: 'purple' as const,
-    slug: 'balance-life'
-  }
-];
-
-const videos = [
-  { title: '100-如何使用AI工具制作飞行棋小游戏', views: '0.6k', platform: '抖音', link: 'https://v.douyin.com/ld6P0YAMVvw/', thumbnail: '/images/飞行棋.png' },
-  { title: '001-抓住AI时代的风口', views: '0.8k', platform: '抖音', link: 'https://v.douyin.com/ORqGKAycWok/', thumbnail: '/images/ai-wind.png' }
-];
-
-const products = [
-  {
-    name: '飞行棋小游戏',
-    description: '使用 AI 工具制作的飞行棋小游戏，可以在线与朋友一起游玩！',
-    icon: '🎲',
-    tags: ['游戏', 'AI', 'React'],
-    color: 'purple' as const,
-    link: '/game/fxq.html'
-  },
-];
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: '小新',
+  url: 'https://xiaoxin-ai-0v0.github.io/xiaoxin-home/',
+  sameAs: ['https://github.com/xiaoxin-ai-0v0'],
+  jobTitle: '开发者'
+};
 ---
 
-<Layout title="我的个人网站 - 年轻/活泼/创造">
-  <!-- 背景特效 -->
-  <div class="fixed inset-0 -z-10 overflow-hidden">
-    <Meteor count={15} />
-    <Sparkles count={50} color="#fbbf24" size={2} />
-  </div>
-
-  <!-- 首页 -->
-  <section id="page-home" class="page-section">
-    <Hero />
-    <StatusCards />
-  </section>
-
-  <!-- 关于我 -->
-  <section id="page-about" class="page-section hidden">
-    <h2 class="text-4xl font-black mb-10">🙋 欢迎来到我的世界</h2>
-
-    <!-- 简介 -->
-    <div class="neo-card p-8 bg-white mb-10">
-      <h3 class="text-2xl font-black mb-4">👨‍💻 关于我</h3>
-      <p class="text-lg text-gray-700 leading-relaxed">
-        你好！我是小新，一名正在成长中的 Java 开发工程师。
-        2023 年开始学习 Java 开发，目前正在学习 AI 开发，致力于成为新时代的 AI 工程师。
-        <br><br>
-        我相信 AI 是未来的趋势，很高兴能在这个时代学习最前沿的技术。
-        空闲时间我会研究新技术、学习 AI 相关知识、或者玩会儿游戏🎮
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
-      <SkillCard skills={skills} />
-      <SkillCard title="我的装备" class="bg-yellow-50">
-        <ul class="space-y-2 font-medium">
-          {equipment.map((item) => (
-            <li class="flex items-center gap-2">{item}</li>
-          ))}
-        </ul>
-      </SkillCard>
-    </div>
-
-    <!-- 时间线 -->
-    <div class="neo-card p-8 bg-blue-50">
-      <h3 class="text-2xl font-black mb-6">📅 我的历程</h3>
-      <div class="space-y-6">
-        {timeline.map((item, index) => (
-          <div class="flex gap-4">
-            <div class="flex flex-col items-center">
-              <div class="w-4 h-4 bg-black rounded-full"></div>
-              {index < timeline.length - 1 && <div class="w-0.5 h-full bg-black mt-2"></div>}
-            </div>
-            <div class="pb-6">
-              <span class="inline-block bg-yellow-400 px-2 py-0.5 text-sm font-bold border-2 border-black rounded">{item.year}</span>
-              <h4 class="text-lg font-bold mt-1">{item.title}</h4>
-              <p class="text-gray-600">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+<Layout
+  title="小新的个人网站 | 项目与博客"
+  description="个人项目、技术博客与创作记录，专注 Web、AI 与小游戏开发。"
+  structuredData={structuredData}
+>
+  <section class="neo-card p-8 md:p-12 bg-white">
+    <p class="inline-block bg-purple-300 neo-button px-4 py-1 font-bold rounded-md mb-4">HELLO, I AM XIAOXIN</p>
+    <h1 class="text-4xl md:text-6xl font-black leading-tight">
+      用项目验证想法，
+      <span class="underline decoration-yellow-400">用内容沉淀能力</span>
+    </h1>
+    <p class="mt-5 text-lg text-gray-700 max-w-3xl">
+      这里展示我的项目实践、技术文章和创作记录。网站已升级为多页面结构，方便快速浏览与持续更新。
+    </p>
+    <div class="flex flex-wrap gap-4 mt-8">
+      <a href="/projects" class="neo-button bg-black text-white px-6 py-3 rounded-md font-bold">查看项目</a>
+      <a href="/contact" class="neo-button bg-white text-black px-6 py-3 rounded-md font-bold">联系我</a>
+      <a href="/blog" class="neo-button bg-white text-black px-6 py-3 rounded-md font-bold">阅读博客</a>
     </div>
   </section>
 
-  <!-- 文章 -->
-  <section id="page-blog" class="page-section hidden">
-    <h2 class="text-4xl font-black mb-4">✍️ 碎碎念与干货</h2>
-    <p class="text-lg text-gray-600 mb-10">记录学习心得，分享技术干货</p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {articles.map((article) => (
-        <ArticleCard {...article} />
-      ))}
+  <section class="mt-12">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-3xl font-black">代表项目</h2>
+      <a href="/projects" class="font-bold underline">查看全部</a>
     </div>
-  </section>
-
-  <!-- 视频 -->
-  <section id="page-video" class="page-section hidden">
-    <h2 class="text-4xl font-black mb-10">🎬 镜头里的故事</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {videos.map((video) => (
-        <VideoCard {...video} />
-      ))}
+      {
+        featuredProjects.map((project) => (
+          <article class="neo-card p-6 bg-white">
+            <p class="text-xs font-bold text-gray-500">{project.data.category}</p>
+            <h3 class="text-2xl font-black mt-2">{project.data.title}</h3>
+            <p class="mt-3 text-gray-700">{project.data.description}</p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              {project.data.tags.slice(0, 3).map((tag) => <span class="px-2 py-1 text-xs border-2 border-black rounded-full">#{tag}</span>)}
+            </div>
+            <a href={`/projects/${project.slug}`} class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">项目详情</a>
+          </article>
+        ))
+      }
     </div>
   </section>
 
-  <!-- 产品 -->
-  <section id="page-product" class="page-section hidden">
-    <h2 class="text-4xl font-black mb-10">📦 实验室的作品</h2>
-    <div class="space-y-6">
-      {products.map((product) => (
-        <ProductCard {...product} />
-      ))}
+  <section class="mt-12">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-3xl font-black">最近更新</h2>
+      <a href="/blog" class="font-bold underline">更多文章</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {
+        recentPosts.map((post) => (
+          <article class="neo-card p-6 bg-white">
+            <p class="text-xs font-bold text-gray-500">{post.data.category} · {post.data.date.toLocaleDateString('zh-CN')}</p>
+            <h3 class="text-xl font-black mt-2">{post.data.title}</h3>
+            <p class="mt-3 text-gray-700">{post.data.description}</p>
+            <a href={`/blog/${post.slug}`} class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">阅读全文</a>
+          </article>
+        ))
+      }
     </div>
   </section>
 </Layout>

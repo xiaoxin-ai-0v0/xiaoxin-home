@@ -1,0 +1,64 @@
+﻿---
+import Layout from '../layouts/Layout.astro';
+
+const skills = [
+  { name: 'Java', level: 85 },
+  { name: 'Spring Boot', level: 80 },
+  { name: 'MySQL', level: 75 },
+  { name: 'Astro', level: 70 },
+  { name: 'AI 应用开发', level: 55 }
+];
+
+const timeline = [
+  { year: '2023', text: '开始系统学习 Java 与后端开发' },
+  { year: '2024', text: '进入真实项目实践，补齐数据库与工程化能力' },
+  { year: '2025', text: '开始构建个人内容体系与技术博客' },
+  { year: '2026', text: '聚焦 AI + Web + 游戏化产品实验' }
+];
+---
+
+<Layout title="关于我 | 小新的个人网站" description="关于小新的技能结构、成长路径与近期方向。">
+  <section class="neo-card p-8 md:p-12 bg-white">
+    <h1 class="text-4xl font-black">关于我</h1>
+    <p class="mt-5 text-lg text-gray-700 leading-relaxed">
+      我是小新，关注 Web 开发、AI 应用与产品化实践。这个网站的目标是持续展示“正在做什么、做到了什么、下一步做什么”。
+    </p>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+    <article class="neo-card p-6 bg-white">
+      <h2 class="text-2xl font-black mb-4">技能结构</h2>
+      <div class="space-y-4">
+        {skills.map((s) => (
+          <div>
+            <div class="flex justify-between font-bold mb-1"><span>{s.name}</span><span>{s.level}%</span></div>
+            <div class="w-full bg-black h-4 rounded-full p-0.5">
+              <div class="h-full bg-yellow-400 rounded-full" style={`width:${s.level}%`}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </article>
+    <article class="neo-card p-6 bg-white">
+      <h2 class="text-2xl font-black mb-4">设备与工作流</h2>
+      <ul class="space-y-2 text-gray-700 font-medium">
+        <li>MacBook + 外接显示器</li>
+        <li>Notion + GitHub 管理任务与交付</li>
+        <li>Astro 构建内容站，持续迭代</li>
+        <li>每周固定复盘项目质量与进度</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="neo-card p-6 bg-white mt-8">
+    <h2 class="text-2xl font-black mb-4">成长时间线</h2>
+    <div class="space-y-4">
+      {timeline.map((item) => (
+        <div class="flex gap-3 items-start">
+          <span class="px-2 py-1 bg-yellow-300 border-2 border-black rounded font-bold text-sm">{item.year}</span>
+          <p class="font-medium text-gray-700">{item.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

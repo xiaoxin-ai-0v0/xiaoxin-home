@@ -1,0 +1,27 @@
+﻿---
+import Layout from '../layouts/Layout.astro';
+
+const contactItems = [
+  { label: 'GitHub', value: 'https://github.com/xiaoxin-ai-0v0', href: 'https://github.com/xiaoxin-ai-0v0' },
+  { label: '抖音', value: 'https://v.douyin.com/b_pHGZTQXWk/', href: 'https://v.douyin.com/b_pHGZTQXWk/' },
+  { label: '邮箱', value: 'hello@xiaoxin.dev', href: 'mailto:hello@xiaoxin.dev' }
+];
+---
+
+<Layout title="联系我 | 小新的个人网站" description="联系方式与合作沟通入口。">
+  <section class="neo-card p-8 md:p-12 bg-white">
+    <h1 class="text-4xl font-black">联系我</h1>
+    <p class="mt-4 text-gray-700 text-lg">如果你有项目合作、技术交流或内容共创想法，欢迎直接联系。</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+      {contactItems.map((item) => (
+        <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" class="neo-card p-5 bg-yellow-50 block">
+          <p class="text-sm text-gray-500 font-bold">{item.label}</p>
+          <p class="font-black text-lg mt-1 break-all">{item.value}</p>
+        </a>
+      ))}
+    </div>
+
+    <p class="mt-8 text-sm text-gray-500">工作日内通常 24 小时回复。</p>
+  </section>
+</Layout>

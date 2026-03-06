@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://xiaoxin-ai-0v0.github.io/xiaoxin-home/sitemap-index.xml

@@ -1,0 +1,59 @@
+﻿---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const allProjects = (await getCollection('projects'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const categories = ['ALL', 'AI', 'Web', 'Game', 'Tool'];
+---
+
+<Layout title="项目列表 | 小新的个人网站" description="项目列表与项目详情，支持按分类筛选。">
+  <section class="neo-card p-8 bg-white">
+    <h1 class="text-4xl font-black">项目列表</h1>
+    <p class="mt-3 text-gray-700">按分类浏览我的项目，查看背景、方案、技术栈与演示链接。</p>
+    <div class="mt-5 flex flex-wrap gap-2" id="category-filters">
+      {
+        categories.map((cat) => (
+          <button class="neo-button px-4 py-2 rounded font-bold bg-white" data-filter={cat}>{cat}</button>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8" id="project-grid">
+    {
+      allProjects.map((project) => (
+        <article class="neo-card p-6 bg-white project-item" data-category={project.data.category}>
+          <p class="text-xs font-bold text-gray-500">{project.data.category} · {project.data.date.toLocaleDateString('zh-CN')}</p>
+          <h2 class="text-2xl font-black mt-2">{project.data.title}</h2>
+          <p class="mt-3 text-gray-700">{project.data.description}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {project.data.tags.map((tag) => <span class="px-2 py-1 text-xs border-2 border-black rounded-full">#{tag}</span>)}
+          </div>
+          <a href={`/projects/${project.slug}`} class="inline-block mt-5 neo-button px-4 py-2 rounded font-bold bg-black text-white">查看详情</a>
+        </article>
+      ))
+    }
+  </section>
+
+  <script is:inline>
+    const buttons = document.querySelectorAll('#category-filters [data-filter]');
+    const items = document.querySelectorAll('.project-item');
+
+    function applyFilter(filter) {
+      items.forEach((item) => {
+        const category = item.dataset.category;
+        item.style.display = filter === 'ALL' || category === filter ? '' : 'none';
+      });
+      buttons.forEach((btn) => {
+        btn.classList.toggle('bg-yellow-400', btn.dataset.filter === filter);
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+    });
+
+    applyFilter('ALL');
+  </script>
+</Layout>
