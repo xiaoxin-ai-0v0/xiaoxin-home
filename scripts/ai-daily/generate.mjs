@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { buildFallbackSummary, normalizeSearchResults, sortDatesDescending } from './core.mjs';
+import { buildFallbackSummary, normalizeSearchResults, sortDatesDescending, toArchiveItems } from './core.mjs';
 import { enrichAiDailyItems } from './providers/openai-compatible.mjs';
 import { fetchAiNewsFromTavily } from './providers/tavily.mjs';
 
@@ -88,8 +88,9 @@ export async function generateArchive(options = {}) {
     };
   }
 
-  const items = Array.isArray(enrichment.items) ? enrichment.items : normalizedItems;
-  const summary = enrichment.summary || buildFallbackSummary({ date, items });
+  const enrichedItems = Array.isArray(enrichment.items) ? enrichment.items : normalizedItems;
+  const items = toArchiveItems(enrichedItems);
+  const summary = enrichment.summary || buildFallbackSummary({ date, items: enrichedItems });
 
   const archive = {
     date,

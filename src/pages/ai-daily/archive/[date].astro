@@ -45,11 +45,7 @@ const archive = await loadArchiveByDate(date!);
           </div>
           <h3 class="text-2xl font-black mt-4 text-balance">{item.titleZh || item.title}</h3>
           <p class="mt-2 text-sm font-bold text-gray-500">{item.source}</p>
-          <p class="mt-3 text-gray-700">{item.snippetZh || item.snippet}</p>
-          <details class="mt-4">
-            <summary class="font-bold cursor-pointer">查看原文片段</summary>
-            <p class="mt-2 text-sm text-gray-600">{item.content}</p>
-          </details>
+          <p class="mt-3 text-gray-700">{item.snippetZh}</p>
           <a
             href={item.url}
             target="_blank"

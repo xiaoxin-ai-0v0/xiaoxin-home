@@ -1,127 +1,135 @@
 {
   "date": "2026-03-10",
-  "generatedAt": "2026-03-10T10:16:51.234Z",
+  "generatedAt": "2026-03-10T14:11:22.003Z",
   "topic": "ai",
   "source": {
     "search": "tavily",
-    "enrichment": "fallback"
+    "enrichment": "minimax-m2.5"
   },
   "counts": {
     "items": 8
   },
   "summary": {
-    "headline": "已沉淀 8 条 AI 资讯",
-    "overview": "这份 AI 观察归档收录了 8 条真实资讯，方便后续复盘、搜索与再加工。",
+    "headline": "OpenAI收购安全公司引发人事变动，AI行业转向混合架构",
+    "overview": "本周AI行业发生多项重大动态：OpenAI收购AI安全初创公司Promptfoo强化AI代理安全，同时其机器人业务负责人因五角大楼合作问题辞职；Anthropic因国防部潜在风险标注引发争议，OpenAI和Google员工为其辩护；行业方面，AGI炒作降温导致向混合AI架构转型成为新趋势。",
     "highlights": [
-      "New rules developed for AI development - Zamin.uz",
-      "From Times Square to Silicon Valley, Nuwa Agricultural Technology Unveils AI-Powered Livestock Robot - openPR.com",
-      "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI - Forbes"
+      "OpenAI收购Promptfoo加强AI代理安全，机器人业务负责人辞职抗议五角大楼合作",
+      "Anthropic被美国国防部列为供应链风险，引发科技巨头员工联名辩护",
+      "行业分析认为AGI炒作消退，混合AI架构成为新方向"
     ]
   },
   "items": [
     {
       "id": "2026-03-10-new-rules-developed-for-ai-development-zaminuz",
       "title": "New rules developed for AI development - Zamin.uz",
-      "titleZh": "New rules developed for AI development - Zamin.uz",
+      "titleZh": "乌兹别克斯坦制定AI开发新规",
       "url": "https://zamin.uz/en/technology/193736-new-rules-developed-for-ai-development.html",
       "source": "Zamin",
       "publishedAt": "Mon, 09 Mar 2026 04:39:47 GMT",
-      "snippet": "How AI is impacting the labor market Redwire unveils new solar panel for satellites Chinese scientists create record-breaking lithium battery Apple is blocking ByteDance apps in USA Information Users of Меҳмон are not allowed to comment thi",
-      "snippetZh": "How AI is impacting the labor market Redwire unveils new solar panel for satellites Chinese scientists create record-breaking lithium battery Apple is blocking ByteDance apps in USA Information Users of Меҳмон are not allowed to comment thi",
-      "content": "How AI is impacting the labor market Redwire unveils new solar panel for satellites Chinese scientists create record-breaking lithium battery Apple is blocking ByteDance apps in USA Information Users of Меҳмон are not allowed to comment this publication. News » Technology » New rules developed for AI development ## Most read Technology news Dollar Rate Forecast for March 5 Announced New era in artificial intelligence: what is the GPT-5.4 model capable of? Apple releases updated beta version of iOS 26.4 Apple releases macOS Tahoe 26.3.1 update Microsoft announces new Xbox Project Helix console OpenAI introduces new GPT 5.4 model to control computers JBL introduces the new compact Go 5 speaker GPT 5.4 becomes leader in AI field [...] This initiative has become even more relevant against the backdrop of the conflict between the Pentagon and the company \"Anthropic.\" It has become clear that the government's sluggishness in the field of AI is threatening national security. Experts emphasize",
-      "contentZh": "How AI is impacting the labor market Redwire unveils new solar panel for satellites Chinese scientists create record-breaking lithium battery Apple is blocking ByteDance apps in USA Information Users of Меҳмон are not allowed to comment this publication. News » Technology » New rules developed for AI development ## Most read Technology news Dollar Rate Forecast for March 5 Announced New era in artificial intelligence: what is the GPT-5.4 model capable of? Apple releases updated beta version of iOS 26.4 Apple releases macOS Tahoe 26.3.1 update Microsoft announces new Xbox Project Helix console OpenAI introduces new GPT 5.4 model to control computers JBL introduces the new compact Go 5 speaker GPT 5.4 becomes leader in AI field [...] This initiative has become even more relevant against the backdrop of the conflict between the Pentagon and the company \"Anthropic.\" It has become clear that the government's sluggishness in the field of AI is threatening national security. Experts emphasize",
-      "tags": []
-    },
-    {
-      "id": "2026-03-10-from-times-square-to-silicon-valley-nuwa-agricultural-technology-unveils-ai-powe",
-      "title": "From Times Square to Silicon Valley, Nuwa Agricultural Technology Unveils AI-Powered Livestock Robot - openPR.com",
-      "titleZh": "From Times Square to Silicon Valley, Nuwa Agricultural Technology Unveils AI-Powered Livestock Robot - openPR.com",
-      "url": "https://www.openpr.com/news/4417029/from-times-square-to-silicon-valley-nuwa-agricultural",
-      "source": "Openpr",
-      "publishedAt": "Mon, 09 Mar 2026 10:16:04 GMT",
-      "snippet": "Silicon Valley - TuringEra, a global leading provider in edge AI solutions, officially launched its next-generation Edge AI SoC Solution in Silicon Valley todaydesigned to streamline the development and deployment of intelligent robotics, s",
-      "snippetZh": "Silicon Valley - TuringEra, a global leading provider in edge AI solutions, officially launched its next-generation Edge AI SoC Solution in Silicon Valley todaydesigned to streamline the development and deployment of intelligent robotics, s",
-      "content": "Silicon Valley - TuringEra, a global leading provider in edge AI solutions, officially launched its next-generation Edge AI SoC Solution in Silicon Valley todaydesigned to streamline the development and deployment of intelligent robotics, smart home appliances, and industrial automation systems. Image: TuringEra's Co-founder Jason Qu Full-Stack AI Chip Strategy: Empowering the Next-Generation Intelligent Computing Ecosystem TuringEra has positioned itself as a provider of full-stack AI infrastructure, offering customized solutions from foundational chips, hardware… 03-09-2026 | Business, Economy, Finances, B … Getnews From Times Square to Silicon Valley, Vaboo Introduces a Data-Driven Future for P … [...] Founders Legal has expanded its enterprise AI and software patent strategy practice to address evolving patent eligibility standards and heightened investor scrutiny surrounding AI-driven platforms. Image: Enterprise AI investment continues to accelerate across infrastructure, analyti",
-      "contentZh": "Silicon Valley - TuringEra, a global leading provider in edge AI solutions, officially launched its next-generation Edge AI SoC Solution in Silicon Valley todaydesigned to streamline the development and deployment of intelligent robotics, smart home appliances, and industrial automation systems. Image: TuringEra's Co-founder Jason Qu Full-Stack AI Chip Strategy: Empowering the Next-Generation Intelligent Computing Ecosystem TuringEra has positioned itself as a provider of full-stack AI infrastructure, offering customized solutions from foundational chips, hardware… 03-09-2026 | Business, Economy, Finances, B … Getnews From Times Square to Silicon Valley, Vaboo Introduces a Data-Driven Future for P … [...] Founders Legal has expanded its enterprise AI and software patent strategy practice to address evolving patent eligibility standards and heightened investor scrutiny surrounding AI-driven platforms. Image: Enterprise AI investment continues to accelerate across infrastructure, analyti",
-      "tags": []
+      "snippetZh": "乌兹别克斯坦出台AI开发监管新规则，AI对劳动力市场的影响引发关注，同时中国科学家创造新的太阳能电池板记录。",
+      "tags": [
+        "AI监管",
+        "政策法规",
+        "国际"
+      ]
     },
     {
       "id": "2026-03-10-incoherent-agi-hype-spurs-an-industrywide-pivot-to-hybrid-ai-forbes",
       "title": "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI - Forbes",
-      "titleZh": "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI - Forbes",
+      "titleZh": "AGI炒作消退 行业转向混合AI架构",
       "url": "https://www.forbes.com/sites/ericsiegel/2026/03/09/incoherent-agi-hype-spurs-an-industrywide-pivot-to-hybrid-ai/",
       "source": "Forbes",
       "publishedAt": "Mon, 09 Mar 2026 12:15:00 GMT",
-      "snippet": "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI Recently on _The Dr. Data Show_, my co-host Luba Gluhova and I dug into the evolving discourse surrounding artificial general intelligence – and its stubborn incoherence. A recent",
-      "snippetZh": "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI Recently on _The Dr. Data Show_, my co-host Luba Gluhova and I dug into the evolving discourse surrounding artificial general intelligence – and its stubborn incoherence. A recent",
-      "content": "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI Recently on _The Dr. Data Show_, my co-host Luba Gluhova and I dug into the evolving discourse surrounding artificial general intelligence – and its stubborn incoherence. A recent publication by the venture capital firm Sequoia Capital projected the arrival of AGI by 2026, defining the concept simply as “the ability to figure things out.” From an engineering and practical standpoint, this definition effectively only reiterates traditional, highly subjective definitions of AI. It is basically another way to say “capable of reasoning,” which has long been a common, if circular, attempt to define AI. [...] AI hype often emphasizes supreme autonomy – and most of the hype at least implies it. The notion of AGI is a natural extension of that aspect of the hype: If a system can do everything a person can, it needs no human in this loop. MORE FOR YOU ### Bitcoin Is Suddenly Braced For A Surprise Fed Price Shock ### Jai Opetaia Vs. Br",
-      "contentZh": "Incoherent AGI Hype Spurs An Industrywide Pivot To Hybrid AI Recently on _The Dr. Data Show_, my co-host Luba Gluhova and I dug into the evolving discourse surrounding artificial general intelligence – and its stubborn incoherence. A recent publication by the venture capital firm Sequoia Capital projected the arrival of AGI by 2026, defining the concept simply as “the ability to figure things out.” From an engineering and practical standpoint, this definition effectively only reiterates traditional, highly subjective definitions of AI. It is basically another way to say “capable of reasoning,” which has long been a common, if circular, attempt to define AI. [...] AI hype often emphasizes supreme autonomy – and most of the hype at least implies it. The notion of AGI is a natural extension of that aspect of the hype: If a system can do everything a person can, it needs no human in this loop. MORE FOR YOU ### Bitcoin Is Suddenly Braced For A Surprise Fed Price Shock ### Jai Opetaia Vs. Br",
-      "tags": []
+      "snippetZh": "行业分析认为通用AI炒作缺乏连贯性，业界正全面转向混合AI架构，平衡生成式AI与传统AI的结合以实现商业价值。",
+      "tags": [
+        "AGI",
+        "行业趋势",
+        "混合AI"
+      ]
     },
     {
-      "id": "2026-03-10-ai-labs-introduces-ai-assisted-crypto-trading-platform-focused-on-data-analysis-",
-      "title": "AI Labs Introduces AI-Assisted Crypto Trading Platform Focused on Data Analysis and Automated Execution - markets.businessinsider.com",
-      "titleZh": "AI Labs Introduces AI-Assisted Crypto Trading Platform Focused on Data Analysis and Automated Execution - markets.businessinsider.com",
-      "url": "https://markets.businessinsider.com/news/stocks/ai-labs-introduces-ai-assisted-crypto-trading-platform-focused-on-data-analysis-and-automated-execution-1035908256",
-      "source": "Markets",
-      "publishedAt": "Mon, 09 Mar 2026 01:45:09 GMT",
-      "snippet": "My Markets Watchlist Markets News # AI Labs Introduces AI-Assisted Crypto Trading Platform Focused on Data Analysis and Automated Execution PRESS RELEASE GlobeNewswire Mar. 8, 2026, 08:14 PM SINGAPORE, March 08, 2026 (GLOBE NEWSWIRE) -- AI",
-      "snippetZh": "My Markets Watchlist Markets News # AI Labs Introduces AI-Assisted Crypto Trading Platform Focused on Data Analysis and Automated Execution PRESS RELEASE GlobeNewswire Mar. 8, 2026, 08:14 PM SINGAPORE, March 08, 2026 (GLOBE NEWSWIRE) -- AI",
-      "content": "My Markets Watchlist Markets News # AI Labs Introduces AI-Assisted Crypto Trading Platform Focused on Data Analysis and Automated Execution PRESS RELEASE GlobeNewswire Mar. 8, 2026, 08:14 PM SINGAPORE, March 08, 2026 (GLOBE NEWSWIRE) -- AI Labs, an AI-driven crypto trading technology company backed by Academic Labs, announced the launch of an AI-assisted platform designed to help cryptocurrency traders analyze market data and respond more efficiently to changing market conditions. As automated tools and algorithmic strategies become more common in global digital asset markets, the platform integrates visual analysis, narrative data monitoring, and automated trade execution features intended to support more structured and data-driven trading decisions. [...] The fastest traders in today's crypto markets may not always be humans. As digital asset markets increasingly incorporate automation, many traders now rely on algorithmic systems that can monitor markets continuously and react to si",
-      "contentZh": "My Markets Watchlist Markets News # AI Labs Introduces AI-Assisted Crypto Trading Platform Focused on Data Analysis and Automated Execution PRESS RELEASE GlobeNewswire Mar. 8, 2026, 08:14 PM SINGAPORE, March 08, 2026 (GLOBE NEWSWIRE) -- AI Labs, an AI-driven crypto trading technology company backed by Academic Labs, announced the launch of an AI-assisted platform designed to help cryptocurrency traders analyze market data and respond more efficiently to changing market conditions. As automated tools and algorithmic strategies become more common in global digital asset markets, the platform integrates visual analysis, narrative data monitoring, and automated trade execution features intended to support more structured and data-driven trading decisions. [...] The fastest traders in today's crypto markets may not always be humans. As digital asset markets increasingly incorporate automation, many traders now rely on algorithmic systems that can monitor markets continuously and react to si",
-      "tags": []
+      "id": "2026-03-10-from-times-square-to-silicon-valley-nuwa-agricultural-technology-unveils-ai-powe",
+      "title": "From Times Square to Silicon Valley, Nuwa Agricultural Technology Unveils AI-Powered Livestock Robot - openPR.com",
+      "titleZh": "Nuwa农业科技推出AI驱动的畜牧机器人",
+      "url": "https://www.openpr.com/news/4417029/from-times-square-to-silicon-valley-nuwa-agricultural",
+      "source": "Openpr",
+      "publishedAt": "Mon, 09 Mar 2026 10:16:04 GMT",
+      "snippetZh": "Nuwa农业科技公司从时代广场到硅谷，展示其AI驱动的畜牧机器人解决方案，将人工智能技术应用于畜牧业。",
+      "tags": [
+        "农业AI",
+        "机器人",
+        "技术创新"
+      ]
+    },
+    {
+      "id": "2026-03-10-pro-worker-ai-streaming-fatalities-and-other-fascinating-new-economic-studies-pl",
+      "title": "'Pro-worker AI,' streaming fatalities, and other fascinating new economic studies : Planet Money - NPR",
+      "titleZh": "新经济研究：AI对劳动力市场影响引关注",
+      "url": "https://www.npr.org/sections/planet-money/2026/03/10/g-s1-112700/pro-worker-ai-streaming-fatalities-and-other-fascinating-new-economic-studies",
+      "source": "Npr",
+      "publishedAt": "Tue, 10 Mar 2026 00:00:00 GMT",
+      "snippetZh": "多项新经济研究探讨AI对就业的影响，调查显示多数美国工人正经历AI焦虑，\"亲劳动者AI\"概念引发讨论。",
+      "tags": [
+        "劳动力市场",
+        "经济研究",
+        "AI影响"
+      ]
     },
     {
       "id": "2026-03-10-openai-and-google-employees-rush-to-anthropics-defense-in-dod-lawsuit-techcrunch",
       "title": "OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit - TechCrunch",
-      "titleZh": "OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit - TechCrunch",
+      "titleZh": "OpenAI和Google员工为Anthropic辩护 反对国防部风险标注",
       "url": "https://techcrunch.com/2026/03/09/openai-and-google-employees-rush-to-anthropics-defense-in-dod-lawsuit/",
       "source": "Techcrunch",
       "publishedAt": "Mon, 09 Mar 2026 21:15:17 GMT",
-      "snippet": "Late last week, the Pentagon labeled Anthropic a supply chain risk — usually reserved for foreign adversaries — after the AI firm refused to allow the Department of Defense to use its technology for mass surveillance of Americans or autonom",
-      "snippetZh": "Late last week, the Pentagon labeled Anthropic a supply chain risk — usually reserved for foreign adversaries — after the AI firm refused to allow the Department of Defense to use its technology for mass surveillance of Americans or autonom",
-      "content": "Late last week, the Pentagon labeled Anthropic a supply chain risk — usually reserved for foreign adversaries — after the AI firm refused to allow the Department of Defense to use its technology for mass surveillance of Americans or autonomously firing weapons. The DOD had argued that it should be able to use AI for any “lawful” purpose and not be constrained by a private contractor. The amicus brief in support of Anthropic showed up on the docket a few hours after the Claude maker filed two lawsuits against the DOD and other federal agencies. Wired was first to report the news. [...] ### Save up to $300 or 30% to TechCrunch Founder Summit #### 1,000+ founders and investors come together at TechCrunch Founder Summit 2026 for a full day focused on growth, execution, and real-world scaling. Learn from founders and investors who have shaped the industry. Connect with peers navigating similar growth stages. Walk away with tactics you can apply immediately Offer ends March 13. San Francisco",
-      "contentZh": "Late last week, the Pentagon labeled Anthropic a supply chain risk — usually reserved for foreign adversaries — after the AI firm refused to allow the Department of Defense to use its technology for mass surveillance of Americans or autonomously firing weapons. The DOD had argued that it should be able to use AI for any “lawful” purpose and not be constrained by a private contractor. The amicus brief in support of Anthropic showed up on the docket a few hours after the Claude maker filed two lawsuits against the DOD and other federal agencies. Wired was first to report the news. [...] ### Save up to $300 or 30% to TechCrunch Founder Summit #### 1,000+ founders and investors come together at TechCrunch Founder Summit 2026 for a full day focused on growth, execution, and real-world scaling. Learn from founders and investors who have shaped the industry. Connect with peers navigating similar growth stages. Walk away with tactics you can apply immediately Offer ends March 13. San Francisco",
-      "tags": []
-    },
-    {
-      "id": "2026-03-10-openai-acquires-ai-security-startup-promptfoo-mlqai",
-      "title": "OpenAI Acquires AI Security Startup Promptfoo - MLQ.ai",
-      "titleZh": "OpenAI Acquires AI Security Startup Promptfoo - MLQ.ai",
-      "url": "https://mlq.ai/news/openai-acquires-ai-security-startup-promptfoo/",
-      "source": "Mlq",
-      "publishedAt": "Mon, 09 Mar 2026 19:57:43 GMT",
-      "snippet": "### Further Sources openai.com openai.com tipranks.com thenextweb.com investing.com intellectia.ai gurufocus.com openai.com Written with AI assistance, verified and edited by our team. Questions? Contact us. Discussion ### Get Started with",
-      "snippetZh": "### Further Sources openai.com openai.com tipranks.com thenextweb.com investing.com intellectia.ai gurufocus.com openai.com Written with AI assistance, verified and edited by our team. Questions? Contact us. Discussion ### Get Started with",
-      "content": "### Further Sources openai.com openai.com tipranks.com thenextweb.com investing.com intellectia.ai gurufocus.com openai.com Written with AI assistance, verified and edited by our team. Questions? Contact us. Discussion ### Get Started with MLQ.ai Sign up to get 5 free AI insights per month Sign up with Google or Already have an account? Log in ## Related News Mar 9, 2026 ### Anthropic Launches Lawsuit Against Pentagon Over National Security Threat Label Mar 9, 2026 ### Anthropic's Claude Opus Discovers 22 Vulnerabilities in Firefox Browser Mar 9, 2026 ### Microsoft Launches Copilot Cowork to Automate Tasks Across Microsoft 365 Mar 9, 2026 ### ABB Robotics and NVIDIA Partner to Bridge Virtual-to-Real AI Deployment Gap ### Share on X 0 characters [...] > We’re acquiring Promptfoo. > > Their technology will strengthen agentic security testing and evaluation capabilities in OpenAI Frontier. Promptfoo will remain open source under the current license, and we will continue to service and sup",
-      "contentZh": "### Further Sources openai.com openai.com tipranks.com thenextweb.com investing.com intellectia.ai gurufocus.com openai.com Written with AI assistance, verified and edited by our team. Questions? Contact us. Discussion ### Get Started with MLQ.ai Sign up to get 5 free AI insights per month Sign up with Google or Already have an account? Log in ## Related News Mar 9, 2026 ### Anthropic Launches Lawsuit Against Pentagon Over National Security Threat Label Mar 9, 2026 ### Anthropic's Claude Opus Discovers 22 Vulnerabilities in Firefox Browser Mar 9, 2026 ### Microsoft Launches Copilot Cowork to Automate Tasks Across Microsoft 365 Mar 9, 2026 ### ABB Robotics and NVIDIA Partner to Bridge Virtual-to-Real AI Deployment Gap ### Share on X 0 characters [...] > We’re acquiring Promptfoo. > > Their technology will strengthen agentic security testing and evaluation capabilities in OpenAI Frontier. Promptfoo will remain open source under the current license, and we will continue to service and sup",
-      "tags": []
+      "snippetZh": "美国国防部将Anthropic列为供应链风险，引发科技行业反对，OpenAI和Google员工联名为其辩护，认为标注不当。",
+      "tags": [
+        "Anthropic",
+        "国防部",
+        "AI伦理"
+      ]
     },
     {
       "id": "2026-03-10-openai-acquires-promptfoo-to-secure-its-ai-agents-techcrunch",
       "title": "OpenAI acquires Promptfoo to secure its AI agents - TechCrunch",
-      "titleZh": "OpenAI acquires Promptfoo to secure its AI agents - TechCrunch",
+      "titleZh": "OpenAI收购Promptfoo强化AI代理安全",
       "url": "https://techcrunch.com/2026/03/09/openai-acquires-promptfoo-to-secure-its-ai-agents/",
       "source": "Techcrunch",
       "publishedAt": "Mon, 09 Mar 2026 17:49:04 GMT",
-      "snippet": "### A roadmap for AI, if anyone will listen + Connie Loizos ## Latest in AI Government & Policy ### OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit + Rebecca Bellan AI ### Anthropic launches code review tool to check",
-      "snippetZh": "### A roadmap for AI, if anyone will listen + Connie Loizos ## Latest in AI Government & Policy ### OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit + Rebecca Bellan AI ### Anthropic launches code review tool to check",
-      "content": "### A roadmap for AI, if anyone will listen + Connie Loizos ## Latest in AI Government & Policy ### OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit + Rebecca Bellan AI ### Anthropic launches code review tool to check flood of AI-generated code + Rebecca Bellan In Brief ### OpenAI acquires Promptfoo to secure its AI agents + Tim Fernholz [...] San Francisco, CA | October 13-15, 2026 REGISTER NOW Topics agentic ai, AI, In Brief, OpenAI, Security, security June 9 Boston, MA Actively scaling? Fundraising? Planning your next launch? TechCrunch Founder Summit 2026 delivers tactical playbooks and direct access to 1,000+ founders and investors who are building, backing, and closing. Register by March 13 to save up to $300. REGISTER NOW ### Newsletters See More Subscribe for the industry’s biggest tech news ## Related Government & Policy ### OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit + Rebecca Bellan Government & Policy ### Will the Pentagon’s",
-      "contentZh": "### A roadmap for AI, if anyone will listen + Connie Loizos ## Latest in AI Government & Policy ### OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit + Rebecca Bellan AI ### Anthropic launches code review tool to check flood of AI-generated code + Rebecca Bellan In Brief ### OpenAI acquires Promptfoo to secure its AI agents + Tim Fernholz [...] San Francisco, CA | October 13-15, 2026 REGISTER NOW Topics agentic ai, AI, In Brief, OpenAI, Security, security June 9 Boston, MA Actively scaling? Fundraising? Planning your next launch? TechCrunch Founder Summit 2026 delivers tactical playbooks and direct access to 1,000+ founders and investors who are building, backing, and closing. Register by March 13 to save up to $300. REGISTER NOW ### Newsletters See More Subscribe for the industry’s biggest tech news ## Related Government & Policy ### OpenAI and Google employees rush to Anthropic’s defense in DOD lawsuit + Rebecca Bellan Government & Policy ### Will the Pentagon’s",
-      "tags": []
+      "snippetZh": "OpenAI宣布收购AI安全初创公司Promptfoo，以加强其AI代理的安全性，此次收购旨在应对AI系统面临的安全挑战。",
+      "tags": [
+        "OpenAI",
+        "收购",
+        "AI安全"
+      ]
     },
     {
       "id": "2026-03-10-openai-robotics-head-resigns-over-pentagon-deal-the-robot-report",
       "title": "OpenAI robotics head resigns over Pentagon deal - The Robot Report",
-      "titleZh": "OpenAI robotics head resigns over Pentagon deal - The Robot Report",
+      "titleZh": "OpenAI机器人业务负责人因五角大楼合作辞职",
       "url": "https://www.therobotreport.com/openai-robotics-head-resigns-over-pentagon-deal/",
       "source": "Therobotreport",
       "publishedAt": "Mon, 09 Mar 2026 17:20:35 GMT",
-      "snippet": "OpenAI announced its deal with the DoD at the end of February. The news came just days after Anthropic ended its own discussions with the DoD. As part of its agreement with the DoD, OpenAI is allowing its technology to be used in classified",
-      "snippetZh": "OpenAI announced its deal with the DoD at the end of February. The news came just days after Anthropic ended its own discussions with the DoD. As part of its agreement with the DoD, OpenAI is allowing its technology to be used in classified",
-      "content": "OpenAI announced its deal with the DoD at the end of February. The news came just days after Anthropic ended its own discussions with the DoD. As part of its agreement with the DoD, OpenAI is allowing its technology to be used in classified environments. Sam Altman, the CEO of OpenAI, claimed that the company’s contract includes protections preventing the DoD from using the company’s technology for surveillance or autonomous weapons. --- #### About The Author ##### Brianna Wessling [...] Kalinowski joined OpenAI in November 2024 to lead the company’s renewed hardware and robotics group. While at the company, Kalinowski helped to build the company’s robotics group as it scaled. Before working at OpenAI, Kalinowski led the Meta team building augmented reality glasses. Before joining OpenAI, Kalinowski worked at Meta, Oculus VR, Apple, and more. | Source: Meta ## OpenAI’s defense agreement Kalinowski’s resignation comes as AI’s role in military operations becomes an increasingly heated di",
-      "contentZh": "OpenAI announced its deal with the DoD at the end of February. The news came just days after Anthropic ended its own discussions with the DoD. As part of its agreement with the DoD, OpenAI is allowing its technology to be used in classified environments. Sam Altman, the CEO of OpenAI, claimed that the company’s contract includes protections preventing the DoD from using the company’s technology for surveillance or autonomous weapons. --- #### About The Author ##### Brianna Wessling [...] Kalinowski joined OpenAI in November 2024 to lead the company’s renewed hardware and robotics group. While at the company, Kalinowski helped to build the company’s robotics group as it scaled. Before working at OpenAI, Kalinowski led the Meta team building augmented reality glasses. Before joining OpenAI, Kalinowski worked at Meta, Oculus VR, Apple, and more. | Source: Meta ## OpenAI’s defense agreement Kalinowski’s resignation comes as AI’s role in military operations becomes an increasingly heated di",
-      "tags": []
+      "snippetZh": "OpenAI机器人业务负责人因公司可能与五角大楼达成合作而辞职，Anthropic此前也希望与美国国防部达成协议并制定AI使用准则。",
+      "tags": [
+        "OpenAI",
+        "人事变动",
+        "国防合作"
+      ]
+    },
+    {
+      "id": "2026-03-10-openai-acquires-ai-security-startup-promptfoo-mlqai",
+      "title": "OpenAI Acquires AI Security Startup Promptfoo - MLQ.ai",
+      "titleZh": "OpenAI收购AI安全初创公司Promptfoo",
+      "url": "https://mlq.ai/news/openai-acquires-ai-security-startup-promptfoo/",
+      "source": "Mlq",
+      "publishedAt": "Mon, 09 Mar 2026 19:57:43 GMT",
+      "snippetZh": "OpenAI完成对AI安全初创公司Promptfoo的收购，进一步强化其在AI安全和代理技术领域的布局。",
+      "tags": [
+        "OpenAI",
+        "收购",
+        "AI安全"
+      ]
     }
   ]
 }

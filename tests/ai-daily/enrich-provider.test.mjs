@@ -105,6 +105,7 @@ test('enrichAiDailyItems uses anthropic coding protocol for api/coding base urls
 
   const request = stub.getRequest();
   const body = JSON.parse(stub.getWrittenBody());
+  const payload = JSON.parse(body.messages[0].content);
 
   assert.equal(String(request.url), 'https://ark.cn-beijing.volces.com/api/coding/v1/messages');
   assert.equal(request.options.headers['x-api-key'], 'test-key');
@@ -113,6 +114,10 @@ test('enrichAiDailyItems uses anthropic coding protocol for api/coding base urls
   assert.equal(body.model, 'minimax-m2.5');
   assert.equal(body.max_tokens, 4000);
   assert.equal(body.stream, false);
+  assert.equal(payload.items.length, 1);
+  assert.equal(payload.items[0].source, 'Example');
+  assert.ok(!('publishedAt' in payload.items[0]));
+  assert.ok(!('content' in payload.items[0]));
   assert.equal(result.summary.headline, 'AI summary generated');
   assert.equal(result.items[0].titleZh, 'OpenAI new agent tools');
   assert.deepEqual(result.items[0].tags, ['OpenAI', 'Agent']);

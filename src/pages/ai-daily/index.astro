@@ -10,16 +10,17 @@ const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${ba
 
 <Layout
   title="AI 观察 | 小新的个人网站"
-  description="持续沉淀 AI 新闻、翻译摘要与每日观察，让个人网站拥有可积累的数据资产。"
+  description="持续沉淀每日 AI 资讯的中文摘要、时间归档与长期可复用的数据资产。"
 >
   <section class="neo-card surface-tint p-8 md:p-12">
     <p class="section-kicker mb-4">ai daily</p>
     <h1 class="headline-display font-black leading-tight text-balance">
       把每日 AI 资讯，
-      <span class="underline decoration-yellow-400">沉淀成自己的数据资产</span>
+      <span class="underline decoration-yellow-400">沉淀成自己的中文资产</span>
     </h1>
     <p class="mt-5 text-lg text-gray-700 max-w-3xl text-balance">
-      这里展示我每天积累的 AI 真实资讯、中文整理和关键观察。第一阶段聚焦 AI 单分类，先把长期可复用的数据底座打稳。
+      这里展示我每天沉淀下来的 AI 观察。数据按日期归档，内容以 AI 整理后的中文标题、中文摘要和重点标签为主，
+      方便长期积累、回看和后续复用。
     </p>
     <div class="mt-8 flex flex-wrap gap-3">
       <a href={withBase('/ai-daily/archive')} class="neo-button bg-black text-white px-5 py-3 rounded-md font-bold">查看归档</a>
@@ -36,7 +37,7 @@ const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${ba
               <p class="section-kicker mb-3">latest digest</p>
               <h2 class="text-3xl font-black">{latest.summary.headline}</h2>
               <p class="mt-3 text-gray-700 text-lg">{latest.summary.overview}</p>
-              <p class="mt-4 text-sm font-bold text-gray-500">归档日期 · {latest.date}</p>
+              <p class="mt-4 text-sm font-bold text-gray-500">归档日期 | {latest.date}</p>
             </div>
             <div class="neo-card p-5 bg-[#fff8dc] w-full md:max-w-sm">
               <p class="text-xs font-bold text-gray-500">今日要点</p>
@@ -56,16 +57,19 @@ const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${ba
             {latest.items.map((item: any) => (
               <article class="neo-card p-6 bg-white/90">
                 <div class="flex flex-wrap gap-2">
-                  {item.tags.map((tag: string) => <span class="chip">#{tag}</span>)}
+                  {(item.tags || []).map((tag: string) => <span class="chip">#{tag}</span>)}
                 </div>
                 <h3 class="text-2xl font-black mt-4 text-balance">{item.titleZh}</h3>
                 <p class="mt-2 text-sm font-bold text-gray-500">{item.source}</p>
                 <p class="mt-3 text-gray-700">{item.snippetZh}</p>
-                <details class="mt-4">
-                  <summary class="font-bold cursor-pointer">查看原文片段</summary>
-                  <p class="mt-2 text-sm text-gray-600">{item.content}</p>
-                </details>
-                <a href={item.url} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">打开来源</a>
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold"
+                >
+                  打开来源
+                </a>
               </article>
             ))}
           </div>
@@ -74,7 +78,7 @@ const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${ba
     ) : (
       <section class="neo-card p-8 bg-white/90 mt-8">
         <h2 class="text-3xl font-black">AI 观察正在初始化</h2>
-        <p class="mt-3 text-gray-700">等第一次数据生成完成后，这里会出现最新的 AI 资讯与摘要。</p>
+        <p class="mt-3 text-gray-700">等第一份数据生成完成后，这里会出现最新的 AI 中文摘要归档。</p>
       </section>
     )
   }

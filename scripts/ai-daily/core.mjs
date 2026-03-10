@@ -1,5 +1,4 @@
-const MAX_SNIPPET_LENGTH = 240;
-const MAX_CONTENT_LENGTH = 1000;
+const MAX_SNIPPET_LENGTH = 120;
 
 function cleanText(value = '') {
   return String(value).replace(/\s+/g, ' ').trim();
@@ -68,11 +67,10 @@ export function normalizeSearchResults(results, options = {}) {
     usedUrls.add(url);
 
     const processed = processedMap[url] || {};
-    const content = truncateText(
-      result.raw_content || result.rawContent || result.content || result.summary || '',
-      MAX_CONTENT_LENGTH,
+    const snippet = truncateText(
+      result.summary || result.content || result.raw_content || result.rawContent || '',
+      MAX_SNIPPET_LENGTH,
     );
-    const snippet = truncateText(result.content || result.summary || content, MAX_SNIPPET_LENGTH);
     const idBase = slugify(title) || `item-${items.length + 1}`;
 
     items.push({
@@ -84,13 +82,24 @@ export function normalizeSearchResults(results, options = {}) {
       publishedAt: result.published_date || result.publishedAt || `${date}T00:00:00.000Z`,
       snippet,
       snippetZh: cleanText(processed.snippetZh || snippet),
-      content,
-      contentZh: cleanText(processed.contentZh || content),
       tags: Array.isArray(processed.tags) ? processed.tags.filter(Boolean).slice(0, 5) : [],
     });
   }
 
   return items;
+}
+
+export function toArchiveItems(items) {
+  return items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    titleZh: item.titleZh || item.title,
+    url: item.url,
+    source: item.source,
+    publishedAt: item.publishedAt || null,
+    snippetZh: item.snippetZh || item.snippet || '',
+    tags: Array.isArray(item.tags) ? item.tags.filter(Boolean).slice(0, 5) : [],
+  }));
 }
 
 export function buildFallbackSummary({ date, items }) {

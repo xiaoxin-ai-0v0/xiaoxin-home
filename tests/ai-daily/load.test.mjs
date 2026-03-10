@@ -23,6 +23,9 @@ test('loaders expose latest digest and sorted archive metadata', async () => {
   assert.equal(index.length, 1);
   assert.equal(index[0].date, '2026-03-10');
   assert.equal(index[0].itemCount, 2);
+  assert.ok(!('snippet' in archive.items[0]));
+  assert.ok(!('content' in archive.items[0]));
+  assert.equal(archive.items[0].snippetZh, 'OpenAI released a new toolkit for agent builders.');
 });
 
 test('loadArchiveTimeline groups entries by year and month', async () => {

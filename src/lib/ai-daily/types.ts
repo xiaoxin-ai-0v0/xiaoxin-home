@@ -5,10 +5,7 @@ export interface AIDailyItem {
   url: string;
   source: string;
   publishedAt: string | null;
-  snippet: string;
   snippetZh: string;
-  content: string;
-  contentZh: string;
   tags: string[];
 }
 

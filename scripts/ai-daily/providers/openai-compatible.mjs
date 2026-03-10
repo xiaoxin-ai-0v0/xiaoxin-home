@@ -110,9 +110,9 @@ function buildUserPayload(date, items) {
     date,
     items: items.map((item) => ({
       url: item.url,
+      source: item.source,
       title: item.title,
       snippet: item.snippet,
-      content: item.content,
     })),
     outputShape: {
       summary: {
@@ -125,7 +125,6 @@ function buildUserPayload(date, items) {
           url: 'string',
           titleZh: 'string',
           snippetZh: 'string',
-          contentZh: 'string',
           tags: ['string'],
         },
       ],
@@ -137,7 +136,10 @@ function buildSystemPrompt() {
   return [
     'You are an AI news editor.',
     'Return valid JSON only.',
-    'For each news item, translate title/snippet/content into concise Chinese and add up to 3 tags.',
+    'You will receive a daily batch of AI news items with title, source, published date, url, and a short source summary.',
+    'You will receive a daily batch of AI news items with title, source, url, and a short source summary.',
+    'For each news item, write a concise Chinese title and a concise Chinese summary, then add up to 3 short tags.',
+    'Do not quote or reproduce long source passages.',
     'Also create a summary object with headline, overview, and 3 highlight strings.',
   ].join(' ');
 }
@@ -243,7 +245,7 @@ export async function enrichAiDailyItems(items, options = {}) {
   const model = options.model ?? process.env.AI_MODEL;
   const date = options.date;
   const requestTimeoutMs =
-    options.requestTimeoutMs ?? (isAnthropicCodingBaseUrl(baseUrl) ? 120000 : 30000);
+    options.requestTimeoutMs ?? (isAnthropicCodingBaseUrl(baseUrl) ? 180000 : 30000);
 
   if (!apiKey || !model || items.length === 0) {
     return {
@@ -273,7 +275,6 @@ export async function enrichAiDailyItems(items, options = {}) {
       ...item,
       titleZh: processed.titleZh?.trim() || item.titleZh || item.title,
       snippetZh: processed.snippetZh?.trim() || item.snippetZh || item.snippet,
-      contentZh: processed.contentZh?.trim() || item.contentZh || item.content,
       tags: Array.isArray(processed.tags) ? processed.tags.filter(Boolean).slice(0, 5) : item.tags,
     };
   });
