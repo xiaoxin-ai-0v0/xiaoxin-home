@@ -1,3 +1,6 @@
+import http from 'node:http';
+import https from 'node:https';
+
 import { buildFallbackSummary } from '../core.mjs';
 
 function extractJsonObject(rawText) {
@@ -54,6 +57,52 @@ function buildMessagesEndpoint(baseUrl) {
   }
 
   return `${normalized}/v1/messages`;
+}
+
+function getRequestClient(targetUrl) {
+  return new URL(targetUrl).protocol === 'http:' ? http : https;
+}
+
+function requestJsonWithNodeHttp({ url, method = 'POST', headers, body, timeoutMs, label }) {
+  return new Promise((resolve, reject) => {
+    const requestClient = getRequestClient(url);
+    const request = requestClient.request(url, { method, headers }, (response) => {
+      let raw = '';
+
+      response.on('data', (chunk) => {
+        raw += chunk;
+      });
+
+      response.on('end', () => {
+        const statusCode = response.statusCode || 0;
+
+        if (statusCode < 200 || statusCode >= 300) {
+          reject(new Error(`${label} failed: ${statusCode}${raw ? ` ${raw}` : ''}`));
+          return;
+        }
+
+        try {
+          resolve(JSON.parse(raw));
+        } catch (error) {
+          reject(new Error(`${label} returned invalid JSON: ${error.message}`));
+        }
+      });
+    });
+
+    request.setTimeout(timeoutMs, () => {
+      request.destroy(new Error(`${label} timed out after ${timeoutMs}ms`));
+    });
+
+    request.on('error', (error) => {
+      reject(error);
+    });
+
+    if (body) {
+      request.write(body);
+    }
+
+    request.end();
+  });
 }
 
 function buildUserPayload(date, items) {
@@ -162,47 +211,39 @@ async function requestOpenAICompatible({ apiKey, baseUrl, model, date, items, re
 }
 
 async function requestAnthropicCompatible({ apiKey, baseUrl, model, date, items, requestTimeoutMs }) {
-  const response = await withTimeout(
-    fetch(buildMessagesEndpoint(baseUrl), {
-      method: 'POST',
-      signal: AbortSignal.timeout(requestTimeoutMs),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: 4000,
-        system: buildSystemPrompt(),
-        messages: [
-          {
-            role: 'user',
-            content: buildUserPayload(date, items),
-          },
-        ],
-      }),
+  return requestJsonWithNodeHttp({
+    url: buildMessagesEndpoint(baseUrl),
+    method: 'POST',
+    timeoutMs: requestTimeoutMs,
+    label: 'AI enrichment request',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: 4000,
+      stream: false,
+      system: buildSystemPrompt(),
+      messages: [
+        {
+          role: 'user',
+          content: buildUserPayload(date, items),
+        },
+      ],
     }),
-    requestTimeoutMs,
-    'AI enrichment request',
-  );
-
-  if (!response.ok) {
-    throw new Error(`AI enrichment failed: ${response.status}`);
-  }
-
-  return response.json();
+  });
 }
 
 export async function enrichAiDailyItems(items, options = {}) {
-  const {
-    apiKey = process.env.AI_API_KEY,
-    baseUrl = process.env.AI_BASE_URL || 'https://api.openai.com/v1',
-    model = process.env.AI_MODEL,
-    date,
-    requestTimeoutMs = 30000,
-  } = options;
+  const apiKey = options.apiKey ?? process.env.AI_API_KEY;
+  const baseUrl = options.baseUrl ?? process.env.AI_BASE_URL ?? 'https://api.openai.com/v1';
+  const model = options.model ?? process.env.AI_MODEL;
+  const date = options.date;
+  const requestTimeoutMs =
+    options.requestTimeoutMs ?? (isAnthropicCodingBaseUrl(baseUrl) ? 120000 : 30000);
 
   if (!apiKey || !model || items.length === 0) {
     return {

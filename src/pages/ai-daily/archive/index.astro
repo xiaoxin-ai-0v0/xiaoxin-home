@@ -1,29 +1,61 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { loadArchiveIndex } from '../../../lib/ai-daily/load.mjs';
+import { loadArchiveTimeline } from '../../../lib/ai-daily/load.mjs';
 
-const entries = await loadArchiveIndex();
+const timeline = await loadArchiveTimeline();
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${basePath}${path}`);
+
+const monthFormatter = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+});
+
+function formatMonthLabel(year: string, month: string) {
+  const safeMonth = month.padStart(2, '0');
+  const parsedDate = new Date(`${year}-${safeMonth}-01T00:00:00Z`);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return `${year}-${safeMonth}`;
+  }
+
+  return monthFormatter.format(parsedDate);
+}
 ---
 
 <Layout
-  title="AI 观察归档 | 小新的个人网站"
-  description="按日期回看已经沉淀的 AI 观察与新闻资产。"
+  title="AI 时间归档 | 小新的个人网站"
+  description="按时间回看已经沉淀下来的 AI 资讯、每日摘要和历史归档。"
 >
   <section class="neo-card surface-tint p-8 md:p-12">
     <p class="section-kicker mb-4">archive</p>
-    <h1 class="headline-display font-black">AI 观察归档</h1>
-    <p class="mt-4 text-lg text-gray-700 max-w-3xl">这里保存每天生成的 AI 资讯归档，既可以公开浏览，也方便我后续做专题整理和知识沉淀。</p>
+    <h1 class="headline-display font-black">AI 时间归档</h1>
+    <p class="mt-4 text-lg text-gray-700 max-w-3xl">
+      这里保存每天沉淀下来的 AI 资讯。数据按日期入库，再按年月整理，方便长期积累、回看和后续复用。
+    </p>
   </section>
 
-  <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-    {entries.map((entry: any) => (
-      <a href={withBase(`/ai-daily/archive/${entry.date}`)} class="neo-card p-6 bg-white/90 block">
-        <p class="text-xs font-bold text-gray-500">{entry.date}</p>
-        <h2 class="text-2xl font-black mt-2">{entry.headline}</h2>
-        <p class="mt-3 text-gray-700">共 {entry.itemCount} 条资讯</p>
-      </a>
+  <section class="mt-10 space-y-10">
+    {timeline.map((group: any) => (
+      <section class="space-y-4">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <p class="section-kicker mb-2">timeline</p>
+            <h2 class="text-3xl font-black">{formatMonthLabel(group.year, group.month)}</h2>
+          </div>
+          <span class="chip">{group.entries.length} 天归档</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {group.entries.map((entry: any) => (
+            <a href={withBase(`/ai-daily/archive/${entry.date}`)} class="neo-card p-6 bg-white/90 block">
+              <p class="text-xs font-bold text-gray-500">{entry.date}</p>
+              <h3 class="text-2xl font-black mt-2">{entry.headline || 'AI 日报归档'}</h3>
+              <p class="mt-3 text-gray-700">已收录 {entry.itemCount} 条资讯</p>
+            </a>
+          ))}
+        </div>
+      </section>
     ))}
   </section>
 </Layout>

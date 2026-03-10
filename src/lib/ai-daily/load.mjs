@@ -73,3 +73,28 @@ export async function loadArchiveIndex(options = {}) {
     headline: archive.summary?.headline || '',
   }));
 }
+
+export async function loadArchiveTimeline(options = {}) {
+  const entries = await loadArchiveIndex(options);
+  const groups = new Map();
+
+  for (const entry of entries) {
+    const [year = 'unknown', month = '00'] = String(entry.date || '').split('-');
+    const key = `${year}-${month}`;
+    const existingGroup = groups.get(key);
+
+    if (existingGroup) {
+      existingGroup.entries.push(entry);
+      continue;
+    }
+
+    groups.set(key, {
+      key,
+      year,
+      month,
+      entries: [entry],
+    });
+  }
+
+  return Array.from(groups.values());
+}
