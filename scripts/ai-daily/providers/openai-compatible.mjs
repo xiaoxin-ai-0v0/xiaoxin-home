@@ -20,6 +20,15 @@ function extractJsonObject(rawText) {
   throw new Error('No JSON object found in model response');
 }
 
+function buildCompletionEndpoints(baseUrl) {
+  const normalized = baseUrl.replace(/\/$/, '');
+  if (normalized.endsWith('/chat/completions')) {
+    return [normalized];
+  }
+
+  return [`${normalized}/chat/completions`, normalized];
+}
+
 export async function enrichAiDailyItems(items, options = {}) {
   const {
     apiKey = process.env.AI_API_KEY,
@@ -36,62 +45,79 @@ export async function enrichAiDailyItems(items, options = {}) {
     };
   }
 
-  const response = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      temperature: 0.2,
-      messages: [
-        {
-          role: 'system',
-          content: [
-            'You are an AI news editor.',
-            'Return valid JSON only.',
-            'For each news item, translate title/snippet/content into concise Chinese and add up to 3 tags.',
-            'Also create a summary object with headline, overview, and 3 highlight strings.',
-          ].join(' '),
-        },
-        {
-          role: 'user',
-          content: JSON.stringify({
-            date,
-            items: items.map((item) => ({
-              url: item.url,
-              title: item.title,
-              snippet: item.snippet,
-              content: item.content,
-            })),
-            outputShape: {
-              summary: {
-                headline: 'string',
-                overview: 'string',
-                highlights: ['string'],
-              },
-              items: [
-                {
-                  url: 'string',
-                  titleZh: 'string',
-                  snippetZh: 'string',
-                  contentZh: 'string',
-                  tags: ['string'],
-                },
-              ],
+  const requestBody = JSON.stringify({
+    model,
+    temperature: 0.2,
+    messages: [
+      {
+        role: 'system',
+        content: [
+          'You are an AI news editor.',
+          'Return valid JSON only.',
+          'For each news item, translate title/snippet/content into concise Chinese and add up to 3 tags.',
+          'Also create a summary object with headline, overview, and 3 highlight strings.',
+        ].join(' '),
+      },
+      {
+        role: 'user',
+        content: JSON.stringify({
+          date,
+          items: items.map((item) => ({
+            url: item.url,
+            title: item.title,
+            snippet: item.snippet,
+            content: item.content,
+          })),
+          outputShape: {
+            summary: {
+              headline: 'string',
+              overview: 'string',
+              highlights: ['string'],
             },
-          }),
-        },
-      ],
-    }),
+            items: [
+              {
+                url: 'string',
+                titleZh: 'string',
+                snippetZh: 'string',
+                contentZh: 'string',
+                tags: ['string'],
+              },
+            ],
+          },
+        }),
+      },
+    ],
   });
 
-  if (!response.ok) {
-    throw new Error(`AI enrichment failed: ${response.status}`);
+  let payload = null;
+  let lastError = null;
+
+  for (const endpoint of buildCompletionEndpoints(baseUrl)) {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: requestBody,
+    });
+
+    if (response.ok) {
+      payload = await response.json();
+      break;
+    }
+
+    lastError = new Error(`AI enrichment failed: ${response.status}`);
+
+    if (response.status !== 404) {
+      throw lastError;
+    }
   }
 
-  const payload = await response.json();
+  if (!payload) {
+    throw lastError || new Error('AI enrichment failed');
+  }
+
   const message = payload.choices?.[0]?.message?.content || '';
   const parsed = JSON.parse(extractJsonObject(message));
 

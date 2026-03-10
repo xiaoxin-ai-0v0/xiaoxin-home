@@ -1,12 +1,14 @@
 {
   "latestDate": "2026-03-10",
-  "dates": ["2026-03-10"],
+  "dates": [
+    "2026-03-10"
+  ],
   "entries": [
     {
       "date": "2026-03-10",
-      "generatedAt": "2026-03-10T08:00:00.000Z",
-      "itemCount": 2,
-      "headline": "AI 产品、模型与代理能力继续加速。"
+      "generatedAt": "2026-03-10T07:56:17.636Z",
+      "itemCount": 8,
+      "headline": "已沉淀 8 条 AI 资讯"
     }
   ]
 }

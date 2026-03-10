@@ -75,7 +75,19 @@ export async function generateArchive(options = {}) {
 
   const rawResults = await fetchSearchResults({ date, limit });
   const normalizedItems = normalizeSearchResults(rawResults, { date, limit });
-  const enrichment = await enrichItems(normalizedItems, { date });
+  let enrichment;
+
+  try {
+    enrichment = await enrichItems(normalizedItems, { date });
+  } catch (error) {
+    console.warn(`AI enrichment skipped: ${error.message}`);
+    enrichment = {
+      items: normalizedItems,
+      summary: buildFallbackSummary({ date, items: normalizedItems }),
+      provider: 'fallback',
+    };
+  }
+
   const items = Array.isArray(enrichment.items) ? enrichment.items : normalizedItems;
   const summary = enrichment.summary || buildFallbackSummary({ date, items });
 

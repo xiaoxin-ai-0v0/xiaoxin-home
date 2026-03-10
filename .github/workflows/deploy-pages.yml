@@ -33,6 +33,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate AI daily data
+        run: npm run ai-daily:generate || echo "Using committed AI daily data"
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+
       - name: Build with Astro
         run: npm run build
 

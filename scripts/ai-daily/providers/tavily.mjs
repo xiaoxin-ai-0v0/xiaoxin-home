@@ -4,26 +4,39 @@ const AI_SEARCH_QUERIES = [
   'AI agents coding tools model releases latest',
 ];
 
+function getDateRange(date) {
+  const end = new Date(`${date}T00:00:00.000Z`);
+  const start = new Date(end);
+  start.setUTCDate(start.getUTCDate() - 1);
+
+  return {
+    startDate: start.toISOString().slice(0, 10),
+    endDate: end.toISOString().slice(0, 10),
+  };
+}
+
 async function searchOnce({ apiKey, query, date, maxResults }) {
+  const { startDate, endDate } = getDateRange(date);
   const response = await fetch('https://api.tavily.com/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
+      api_key: apiKey,
       query,
       topic: 'news',
+      include_answers: 'advanced',
       search_depth: 'advanced',
-      include_raw_content: 'text',
       max_results: maxResults,
-      start_date: date,
-      end_date: date,
+      start_date: startDate,
+      end_date: endDate,
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`Tavily search failed: ${response.status}`);
+    const errorText = await response.text();
+    throw new Error(`Tavily search failed: ${response.status} ${errorText}`);
   }
 
   const payload = await response.json();
