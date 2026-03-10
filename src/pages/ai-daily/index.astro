@@ -1,0 +1,97 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { loadArchiveIndex, loadLatestDigest } from '../../lib/ai-daily/load.mjs';
+
+const latest = await loadLatestDigest();
+const archiveEntries = await loadArchiveIndex();
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${basePath}${path}`);
+---
+
+<Layout
+  title="AI 观察 | 小新的个人网站"
+  description="持续沉淀 AI 新闻、翻译摘要与每日观察，让个人网站拥有可积累的数据资产。"
+>
+  <section class="neo-card surface-tint p-8 md:p-12">
+    <p class="section-kicker mb-4">ai daily</p>
+    <h1 class="headline-display font-black leading-tight text-balance">
+      把每日 AI 资讯，
+      <span class="underline decoration-yellow-400">沉淀成自己的数据资产</span>
+    </h1>
+    <p class="mt-5 text-lg text-gray-700 max-w-3xl text-balance">
+      这里展示我每天积累的 AI 真实资讯、中文整理和关键观察。第一阶段聚焦 AI 单分类，先把长期可复用的数据底座打稳。
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href={withBase('/ai-daily/archive')} class="neo-button bg-black text-white px-5 py-3 rounded-md font-bold">查看归档</a>
+      <a href={withBase('/blog')} class="neo-button bg-white text-black px-5 py-3 rounded-md font-bold">返回博客</a>
+    </div>
+  </section>
+
+  {
+    latest ? (
+      <>
+        <section class="neo-card p-7 bg-white/90 mt-8">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div class="max-w-3xl">
+              <p class="section-kicker mb-3">latest digest</p>
+              <h2 class="text-3xl font-black">{latest.summary.headline}</h2>
+              <p class="mt-3 text-gray-700 text-lg">{latest.summary.overview}</p>
+              <p class="mt-4 text-sm font-bold text-gray-500">归档日期 · {latest.date}</p>
+            </div>
+            <div class="neo-card p-5 bg-[#fff8dc] w-full md:max-w-sm">
+              <p class="text-xs font-bold text-gray-500">今日要点</p>
+              <ul class="mt-3 space-y-3">
+                {latest.summary.highlights.map((point: string) => <li class="font-bold text-gray-800">- {point}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-12">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-3xl font-black">最新资讯</h2>
+            <span class="chip">{latest.counts.items} 条</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {latest.items.map((item: any) => (
+              <article class="neo-card p-6 bg-white/90">
+                <div class="flex flex-wrap gap-2">
+                  {item.tags.map((tag: string) => <span class="chip">#{tag}</span>)}
+                </div>
+                <h3 class="text-2xl font-black mt-4 text-balance">{item.titleZh}</h3>
+                <p class="mt-2 text-sm font-bold text-gray-500">{item.source}</p>
+                <p class="mt-3 text-gray-700">{item.snippetZh}</p>
+                <details class="mt-4">
+                  <summary class="font-bold cursor-pointer">查看原文片段</summary>
+                  <p class="mt-2 text-sm text-gray-600">{item.content}</p>
+                </details>
+                <a href={item.url} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 neo-button bg-black text-white px-4 py-2 rounded-md font-bold">打开来源</a>
+              </article>
+            ))}
+          </div>
+        </section>
+      </>
+    ) : (
+      <section class="neo-card p-8 bg-white/90 mt-8">
+        <h2 class="text-3xl font-black">AI 观察正在初始化</h2>
+        <p class="mt-3 text-gray-700">等第一次数据生成完成后，这里会出现最新的 AI 资讯与摘要。</p>
+      </section>
+    )
+  }
+
+  <section class="mt-12">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-3xl font-black">归档时间线</h2>
+      <a href={withBase('/ai-daily/archive')} class="font-bold underline">查看全部</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {archiveEntries.slice(0, 6).map((entry: any) => (
+        <a href={withBase(`/ai-daily/archive/${entry.date}`)} class="neo-card p-6 bg-white/90 block">
+          <p class="text-xs font-bold text-gray-500">{entry.date}</p>
+          <h3 class="text-xl font-black mt-2">{entry.headline}</h3>
+          <p class="mt-3 text-gray-700">已收录 {entry.itemCount} 条资讯</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

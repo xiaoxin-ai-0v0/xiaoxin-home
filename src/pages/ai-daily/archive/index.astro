@@ -1,0 +1,29 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { loadArchiveIndex } from '../../../lib/ai-daily/load.mjs';
+
+const entries = await loadArchiveIndex();
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${basePath}${path}`);
+---
+
+<Layout
+  title="AI 观察归档 | 小新的个人网站"
+  description="按日期回看已经沉淀的 AI 观察与新闻资产。"
+>
+  <section class="neo-card surface-tint p-8 md:p-12">
+    <p class="section-kicker mb-4">archive</p>
+    <h1 class="headline-display font-black">AI 观察归档</h1>
+    <p class="mt-4 text-lg text-gray-700 max-w-3xl">这里保存每天生成的 AI 资讯归档，既可以公开浏览，也方便我后续做专题整理和知识沉淀。</p>
+  </section>
+
+  <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+    {entries.map((entry: any) => (
+      <a href={withBase(`/ai-daily/archive/${entry.date}`)} class="neo-card p-6 bg-white/90 block">
+        <p class="text-xs font-bold text-gray-500">{entry.date}</p>
+        <h2 class="text-2xl font-black mt-2">{entry.headline}</h2>
+        <p class="mt-3 text-gray-700">共 {entry.itemCount} 条资讯</p>
+      </a>
+    ))}
+  </section>
+</Layout>

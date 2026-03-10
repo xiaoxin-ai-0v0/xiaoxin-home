@@ -1,0 +1,49 @@
+{
+  "date": "2026-03-10",
+  "generatedAt": "2026-03-10T08:00:00.000Z",
+  "topic": "ai",
+  "source": {
+    "search": "tavily",
+    "enrichment": "seed"
+  },
+  "counts": {
+    "items": 2
+  },
+  "summary": {
+    "headline": "AI 产品、模型与代理能力继续加速。",
+    "overview": "这份首批 AI 观察样例展示了 xiaoxin-home 的数据底座形态，后续会由定时任务持续补充真实新闻归档。",
+    "highlights": [
+      "智能体工具链仍是高频方向",
+      "AI 编程产品持续获得市场关注",
+      "个人站开始具备长期数据沉淀能力"
+    ]
+  },
+  "items": [
+    {
+      "id": "2026-03-10-openai-launches-new-agent-tools",
+      "title": "OpenAI launches new agent tools",
+      "titleZh": "OpenAI 发布新的智能体工具",
+      "url": "https://example.com/openai-agent-tools",
+      "source": "Example",
+      "publishedAt": "2026-03-10T02:30:00.000Z",
+      "snippet": "OpenAI introduced a new toolkit for agent builders.",
+      "snippetZh": "OpenAI 发布了一套新的智能体开发工具。",
+      "content": "OpenAI introduced a new toolkit for agent builders, including orchestration and eval support.",
+      "contentZh": "OpenAI 面向智能体开发者推出了新工具集，包括编排和评测支持。",
+      "tags": ["OpenAI", "Agent"]
+    },
+    {
+      "id": "2026-03-10-ai-coding-startups-grow",
+      "title": "AI coding startups grow fast",
+      "titleZh": "AI 编程创业公司快速增长",
+      "url": "https://example.com/ai-coding-growth",
+      "source": "Example",
+      "publishedAt": "2026-03-10T04:00:00.000Z",
+      "snippet": "Investors continue to back AI coding tools.",
+      "snippetZh": "投资人继续加码 AI 编程工具。",
+      "content": "Investors continue to back AI coding tools as usage expands in software teams.",
+      "contentZh": "随着软件团队使用率提升，投资人继续看好 AI 编程工具。",
+      "tags": ["Coding", "Startup"]
+    }
+  ]
+}

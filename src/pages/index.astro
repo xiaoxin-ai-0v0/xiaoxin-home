@@ -1,11 +1,13 @@
 ﻿---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { loadLatestDigest } from '../lib/ai-daily/load.mjs';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const projects = (await getCollection('projects'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const latestDigest = await loadLatestDigest();
 
 const recentPosts = posts.slice(0, 3);
 const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 3);
@@ -59,6 +61,33 @@ const withBase = (path: string) => (path === '/' ? `${basePath}/` || '/' : `${ba
       <div class="flex gap-3">
         <a href={withBase('/game/fxq.html')} class="neo-button bg-black text-white px-5 py-3 rounded-md font-bold">开始游戏</a>
         <a href={withBase('/projects')} class="neo-button bg-white text-black px-5 py-3 rounded-md font-bold">查看项目页</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="neo-card p-7 bg-white/90 mt-8">
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+      <div class="max-w-3xl">
+        <p class="section-kicker mb-3">ai daily</p>
+        <h2 class="text-3xl font-black">AI 观察数据底座</h2>
+        <p class="mt-2 text-gray-700">
+          {
+            latestDigest
+              ? latestDigest.summary.overview
+              : '我正在把每日 AI 资讯沉淀成长期可复用的数据资产，后续会持续积累。'
+          }
+        </p>
+        {
+          latestDigest && (
+            <div class="mt-4 flex flex-wrap gap-2">
+              {latestDigest.summary.highlights.slice(0, 3).map((point: string) => <span class="chip">{point}</span>)}
+            </div>
+          )
+        }
+      </div>
+      <div class="flex gap-3">
+        <a href={withBase('/ai-daily')} class="neo-button bg-black text-white px-5 py-3 rounded-md font-bold">查看 AI 观察</a>
+        <a href={withBase('/ai-daily/archive')} class="neo-button bg-white text-black px-5 py-3 rounded-md font-bold">查看归档</a>
       </div>
     </div>
   </section>
