@@ -1,11 +1,18 @@
 {
-  "latestDate": "2026-03-12",
+  "latestDate": "2026-03-13",
   "dates": [
+    "2026-03-13",
     "2026-03-12",
     "2026-03-11",
     "2026-03-10"
   ],
   "entries": [
+    {
+      "date": "2026-03-13",
+      "generatedAt": "2026-03-13T05:07:15.575Z",
+      "itemCount": 8,
+      "headline": "AI领域动态密集：Anthropic洽谈合资企业，Meta推迟发布，Atlassian大裁员"
+    },
     {
       "date": "2026-03-12",
       "generatedAt": "2026-03-12T05:09:41.496Z",
